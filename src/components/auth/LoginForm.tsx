@@ -3,11 +3,22 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "../ui/field";
+import { useActionState, useEffect } from "react";
+import { loginUser } from "@/services/auth/loginUser";
+import { toast } from "sonner";
+import InputFieldsError from "../Shared/InputFiledsError";
 
-const LoginForm = () => {
+const LoginForm = ({ redirect }: { redirect?: string }) => {
+  const [state, formAction, isPending] = useActionState(loginUser, null);
+
+  useEffect(() => {
+    if (state && !state.success && state.message) {
+      toast.error(state.message);
+    }
+  }, [state]);
   return (
-    <form action={""}>
-      {/* {redirect && <input type="hidden" name="redirect" value={redirect} />} */}
+    <form action={formAction}>
+      {redirect && <input type="hidden" name="redirect" value={redirect} />}
       <FieldGroup>
         <div className="grid grid-cols-1  gap-4">
           {/* email */}
@@ -19,7 +30,7 @@ const LoginForm = () => {
               type="email"
               placeholder="example@gmail.com"
             />
-            {/* <InputFieldsError field="email" state={state} /> */}
+            <InputFieldsError field="email" state={state} />
           </Field>
 
           {/* password */}
@@ -31,17 +42,13 @@ const LoginForm = () => {
               type="password"
               placeholder="*******"
             />
-            {/* <InputFieldsError field="password" state={state} /> */}
+            <InputFieldsError field="password" state={state} />
           </Field>
         </div>
         <FieldGroup className="mt-4">
           <Field>
-            <Button
-              type="submit"
-              //   disabled={isPending}
-            >
-              {/* {isPending ? "Logging in..." : "Login"} */}
-              Login
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Logging in..." : "Login"}
             </Button>
             <Button variant={"outline"} type="button">
               Sign up with google
