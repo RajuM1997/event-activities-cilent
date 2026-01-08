@@ -3,10 +3,10 @@
 import { serverFetch } from "@/lib/server-fetch";
 import { zodValidator } from "@/lib/zodValidator";
 import { IUser } from "@/types/user.interface";
-import { registerUserValidationZodSchema } from "@/zod/auth.validation";
+import { registerHostValidationZodSchema } from "@/zod/auth.validation";
 import { loginUser } from "./loginUser";
 
-export const registerUser = async (
+export const registerHost = async (
   _currentState: any,
   formData: any
 ): Promise<any> => {
@@ -17,45 +17,43 @@ export const registerUser = async (
       password: formData.get("password"),
       confirmPassword: formData.get("confirmPassword"),
       bio: formData.get("bio"),
-      interests: formData.get("interests"),
-      city: formData.get("city"),
-      area: formData.get("area"),
-      country: formData.get("country"),
+      address: formData.get("address"),
+      phoneNumber: formData.get("phoneNumber"),
     };
+    console.log({ payload });
+
+    console.log(payload, registerHostValidationZodSchema);
 
     if (
-      zodValidator(payload, registerUserValidationZodSchema).success === false
+      zodValidator(payload, registerHostValidationZodSchema).success === false
     ) {
-      return zodValidator(payload, registerUserValidationZodSchema);
+      return zodValidator(payload, registerHostValidationZodSchema);
     }
 
     const validatedPayload: IUser | any = zodValidator(
       payload,
-      registerUserValidationZodSchema
+      registerHostValidationZodSchema
     ).data;
 
     const registerData = {
       password: validatedPayload.password,
-      userData: {
+      hostData: {
         name: validatedPayload.name,
         email: validatedPayload.email,
         password: validatedPayload.password,
         bio: validatedPayload.bio,
-        interests: validatedPayload.interests,
-      },
-      locationData: {
-        city: validatedPayload.city,
-        area: validatedPayload.area,
-        country: validatedPayload.country,
+        address: validatedPayload.address,
+        phoneNumber: validatedPayload.phoneNumber,
       },
     };
+    console.log(registerData);
 
     const newFormData = new FormData();
     newFormData.append("data", JSON.stringify(registerData));
     if (formData.get("file")) {
       newFormData.append("file", formData.get("file") as Blob);
     }
-    const res = await serverFetch.post("/user/create-user", {
+    const res = await serverFetch.post("/user/create-host", {
       body: newFormData,
     });
     const result = await res.json();
@@ -73,7 +71,7 @@ export const registerUser = async (
       message: `${
         process.env.NODE_ENV === "development"
           ? error.message
-          : "Registration Failed. Please try again."
+          : "Host registration Failed. Please try again."
       }`,
     };
   }

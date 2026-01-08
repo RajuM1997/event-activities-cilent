@@ -6,7 +6,7 @@ import { Field, FieldDescription, FieldGroup, FieldLabel } from "../ui/field";
 import { useActionState, useEffect } from "react";
 import { loginUser } from "@/services/auth/loginUser";
 import { toast } from "sonner";
-import InputFieldsError from "../Shared/InputFiledsError";
+import InputFieldsError from "../Shared/InputFieldsError";
 
 const LoginForm = ({ redirect }: { redirect?: string }) => {
   const [state, formAction, isPending] = useActionState(loginUser, null);

@@ -28,6 +28,31 @@ export const registerUserValidationZodSchema = z
     path: ["confirmPassword"],
   });
 
+export const registerHostValidationZodSchema = z
+  .object({
+    name: z.string().min(1, { message: "Name is required" }),
+    bio: z.string().min(1, { message: "Bio is required" }),
+    address: z.string().min(1, { message: "address is required" }),
+    phoneNumber: z.string().min(1, { message: "Phone number is required" }),
+    email: z.email({ message: "Valid email is required" }),
+    password: z
+      .string()
+      .min(6, {
+        error: "Password is required and must be at least 6 characters long",
+      })
+      .max(100, {
+        error: "Password must be at most 100 characters long",
+      }),
+    confirmPassword: z.string().min(6, {
+      error:
+        "Confirm Password is required and must be at least 6 characters long",
+    }),
+  })
+  .refine((data: any) => data.password === data.confirmPassword, {
+    error: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
 export const loginValidationZodSchema = z.object({
   email: z.email({
     message: "Email is required",

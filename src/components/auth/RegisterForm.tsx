@@ -11,17 +11,33 @@ import { Input } from "@/components/ui/input";
 import { registerUser } from "@/services/auth/registerUser";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
-import InputFieldsError from "../Shared/InputFiledsError";
+import InputFieldsError from "../Shared/InputFieldsError";
 import { Textarea } from "../ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 const RegisterForm = () => {
   const [state, formAction, isPending] = useActionState(registerUser, null);
+  // const fileInputRef = useRef<HTMLInputElement>(null);
+  // const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (state && !state.success && state.message) {
       toast.error(state.message);
     }
   }, [state]);
+
+  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   setSelectedFile(file || null);
+  // };
 
   return (
     <form action={formAction}>
@@ -63,7 +79,7 @@ const RegisterForm = () => {
           </Field>
           {/* password */}
           <Field>
-            <FieldLabel htmlFor="confirmPassword">Password</FieldLabel>
+            <FieldLabel htmlFor="confirmPassword">Confirm Password</FieldLabel>
             <Input
               id="confirmPassword"
               name="confirmPassword"
@@ -108,11 +124,45 @@ const RegisterForm = () => {
 
             <InputFieldsError field="name" state={state} />
           </Field>
+          {/* interests */}
+          <Field>
+            <FieldLabel htmlFor="interests">Interests</FieldLabel>
+            <Select name="interests">
+              <SelectTrigger>
+                <SelectValue placeholder="Select a Interests" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Interests</SelectLabel>
+                  <SelectItem value="Sports">Sports</SelectItem>
+                  <SelectItem value="Gaming">Gaming</SelectItem>
+                  <SelectItem value="Art">Art</SelectItem>
+                  <SelectItem value="Travel">Travel</SelectItem>
+                  <SelectItem value="Fitness">Fitness</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <InputFieldsError field="interests" state={state} />
+          </Field>
           {/* bio */}
           <Field>
             <FieldLabel htmlFor="bio">Bio</FieldLabel>
             <Textarea id="bio" name="bio" placeholder="Type your Bio here." />
             <InputFieldsError field="bio" state={state} />
+          </Field>
+          {/* file */}
+          <Field>
+            <FieldLabel htmlFor="file">Upload You Photo</FieldLabel>
+
+            <Input
+              // ref={fileInputRef}
+              // onChange={handleFileChange}
+              id="file"
+              name="file"
+              type="file"
+              accept="image/*"
+            />
+            <InputFieldsError field="icon" state={state} />
           </Field>
         </div>
         <FieldGroup className="mt-4">

@@ -15,7 +15,6 @@ export interface ILocation {
 }
 
 export enum UserInterests {
-  interests,
   Sports,
   Gaming,
   Art,
