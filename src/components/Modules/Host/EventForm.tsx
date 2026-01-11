@@ -20,14 +20,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { loginUser } from "@/services/auth/loginUser";
+import { createEvent } from "@/services/event/event.service";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const CreateEventForm = () => {
-  const [state, formAction, isPending] = useActionState(loginUser, null);
+  const [state, formAction, isPending] = useActionState(createEvent, null);
   const [date, setDate] = useState<Date>();
   useEffect(() => {
     if (state && !state.success && state.message) {
