@@ -1,4 +1,5 @@
 export interface IEvent {
+  id?: string;
   eventName: string;
   date: string;
   description: string;
@@ -7,8 +8,11 @@ export interface IEvent {
   maxParticipants: string;
   category: string;
   joiningFee: string;
+  status: EventStatus;
 }
-type EventStatus = {
-  OPEN: "OPEN";
-  CLOGED: "";
-};
+export enum EventStatus {
+  "OPEN",
+  "FULL",
+  "CANCELLED",
+  "COMPLETED",
+}

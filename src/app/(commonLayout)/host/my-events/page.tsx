@@ -1,7 +1,13 @@
-const CreateEventPage = () => {
+import HostMyEventsTable from "@/components/Modules/Host/MyEvent/HostMyEventTable";
+import { getEvents } from "@/services/event/event.service";
+
+const CreateEventPage = async () => {
+  const { data } = await getEvents();
+  console.log(data);
+
   return (
-    <div>
-      <h1>Create Event page</h1>
+    <div className="space-y-6 container mx-auto py-5">
+      <HostMyEventsTable event={data || []} />
     </div>
   );
 };

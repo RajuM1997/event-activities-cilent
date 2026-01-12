@@ -1,4 +1,4 @@
-import CreateEventForm from "@/components/Modules/Host/EventForm";
+import CreateEventForm from "@/components/Modules/Host/CreateEvent/EventForm";
 import {
   Card,
   CardContent,

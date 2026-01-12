@@ -21,7 +21,7 @@ const PublicNavbar = async () => {
     { name: "Home", href: "/" },
     { name: "Explore Events", href: "/events" },
     { name: "Become a Host", href: "/become-a-host" },
-    { name: "My Events", href: "/my-events" },
+    { name: "My Events", href: "/host/my-events" },
     { name: "Create Event", href: "/host/create-event" },
     { name: "Dashboard", href: "/dashboard" },
     { name: "Profile", href: "/profile" },

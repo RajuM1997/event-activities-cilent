@@ -11,7 +11,6 @@ const serverFetchHelper = async (
 ): Promise<Response> => {
   const { headers, ...restOptions } = options;
   const accessToken = await getCookie("accessToken");
-  console.log(accessToken);
 
   //to stop recursion loop
   if (endpoint !== "/auth/refresh-token") {

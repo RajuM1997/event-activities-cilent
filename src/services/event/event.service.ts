@@ -91,10 +91,12 @@ export const getEvents = async () => {
   }
 };
 
-export const updateEvent = async (payload: any) => {
-  console.log(payload);
+export const updateEvent = async (id: string) => {
+  console.log(id);
+  return { success: true, message: "update Successfully" };
 };
 
 export const deleteEvent = async (id: string) => {
   console.log(id);
+  return { success: true, message: "update Successfully" };
 };
