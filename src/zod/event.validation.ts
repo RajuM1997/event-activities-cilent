@@ -3,7 +3,6 @@ import z from "zod";
 export const createEventValidationZodSchema = z.object({
   eventName: z.string().min(1, { message: "Event name is required" }),
   date: z.string().min(1, { message: "Date is required" }),
-  interests: z.string().min(1, { message: "Interests is required" }),
   location: z.string().min(1, { message: "Location is required" }),
   maxParticipants: z
     .string()

@@ -2,14 +2,8 @@
 
 import InputFieldsError from "@/components/Shared/InputFieldsError";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -21,14 +15,12 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { createEvent } from "@/services/event/event.service";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 
 const CreateEventForm = () => {
   const [state, formAction, isPending] = useActionState(createEvent, null);
-  const [date, setDate] = useState<Date>();
+
   useEffect(() => {
     if (state && !state.success && state.message) {
       toast.error(state.message);
@@ -54,22 +46,13 @@ const CreateEventForm = () => {
           {/* date */}
           <Field>
             <FieldLabel htmlFor="date">Date</FieldLabel>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  data-empty={!date}
-                  className="data-[empty=true]:text-muted-foreground w-70 justify-start text-left font-normal"
-                >
-                  <CalendarIcon />
-                  {date ? format(date, "PPP") : <span>Pick a date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar mode="single" selected={date} onSelect={setDate} />
-              </PopoverContent>
-            </Popover>
-            {/* <InputFieldsError field="address" state={state} /> */}
+            <Input
+              id="date"
+              name="date"
+              type="date"
+              defaultValue={state?.formData?.date || ""}
+            />
+            <InputFieldsError field="date" state={state} />
           </Field>
 
           {/* location */}
@@ -120,6 +103,7 @@ const CreateEventForm = () => {
             />
             <InputFieldsError field="joiningFee" state={state} />
           </Field>
+          {/* category */}
           <Field>
             <FieldLabel htmlFor="category">Category</FieldLabel>
             <Select name="category">
@@ -141,7 +125,8 @@ const CreateEventForm = () => {
             </Select>
             <InputFieldsError field="category" state={state} />
           </Field>
-          {/* bio */}
+
+          {/* description */}
           <Field>
             <FieldLabel htmlFor="description">Description</FieldLabel>
             <Textarea
@@ -167,6 +152,7 @@ const CreateEventForm = () => {
             <InputFieldsError field="icon" state={state} />
           </Field>
         </div>
+
         <FieldGroup className="mt-4">
           <Field>
             <Button type="submit" disabled={isPending}>
