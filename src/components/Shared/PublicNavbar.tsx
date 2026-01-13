@@ -23,7 +23,7 @@ const PublicNavbar = async () => {
     { name: "Become a Host", href: "/become-a-host" },
     { name: "My Events", href: "/host/my-events" },
     { name: "Create Event", href: "/host/create-event" },
-    { name: "Dashboard", href: "/dashboard" },
+    { name: "Dashboard", href: "/admin/dashboard" },
     { name: "Profile", href: "/profile" },
   ];
   const accessToken = await getCookie("accessToken");
