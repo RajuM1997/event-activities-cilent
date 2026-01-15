@@ -90,6 +90,17 @@ export const adminNavItems: NavSection[] = [
       },
     ],
   },
+  {
+    title: "User Profile",
+    items: [
+      {
+        title: "User Profile",
+        href: "/profile",
+        icon: "Stethoscope", // ✅ String
+        roles: ["ADMIN"],
+      },
+    ],
+  },
 ];
 
 export const getNavItemsByRole = (): NavSection[] => {

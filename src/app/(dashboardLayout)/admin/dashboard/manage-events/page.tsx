@@ -1,5 +1,13 @@
-const ManageEventsPage = () => {
-  return <div>ManageEventsPage</div>;
+import HostMyEventsTable from "@/components/Modules/Host/MyEvent/HostMyEventTable";
+import { getEvents } from "@/services/event/event.service";
+
+const ManageEventsPage = async () => {
+  const { data } = await getEvents();
+  return (
+    <div className="space-y-6 container mx-auto py-5">
+      <HostMyEventsTable event={data || []} />
+    </div>
+  );
 };
 
 export default ManageEventsPage;
