@@ -6,6 +6,8 @@ export interface IUser {
   email: string;
   bio: string;
   location: ILocation;
+  status: string;
+  userProfile?: IUserProfile;
 }
 
 export interface ILocation {
@@ -20,4 +22,12 @@ export enum UserInterests {
   Art,
   Travel,
   Fitness,
+}
+export interface IUserProfile {
+  name: string;
+  photo?: string;
+  interests: UserInterests;
+  email: string;
+  bio: string;
+  location: ILocation;
 }
