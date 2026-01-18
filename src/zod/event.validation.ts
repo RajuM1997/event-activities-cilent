@@ -14,3 +14,14 @@ export const createEventValidationZodSchema = z.object({
   category: z.string().min(1, { message: "Min participants is required" }),
   description: z.string().min(1, { message: "Description is required" }),
 });
+
+export const updateEventValidationZodSchema = z.object({
+  eventName: z.string().optional(),
+  date: z.string().optional(),
+  location: z.string().optional(),
+  maxParticipants: z.string().optional(),
+  minParticipants: z.string().optional(),
+  joiningFee: z.string().optional(),
+  category: z.string().optional(),
+  description: z.string().optional(),
+});

@@ -1,6 +1,9 @@
 import { serverFetch } from "@/lib/server-fetch";
 import { zodValidator } from "@/lib/zodValidator";
-import { createEventValidationZodSchema } from "@/zod/event.validation";
+import {
+  createEventValidationZodSchema,
+  updateEventValidationZodSchema,
+} from "@/zod/event.validation";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const createEvent = async (
@@ -42,7 +45,6 @@ export const createEvent = async (
         joiningFee: Number(validatedPayload.joiningFee),
       },
     };
-    console.log(eventData);
 
     const newFormData = new FormData();
     newFormData.append("data", JSON.stringify(eventData));
@@ -85,7 +87,50 @@ export const getEvents = async () => {
       message: `${
         process.env.NODE_ENV === "development"
           ? error.message
-          : "Event Create Failed. Please try again."
+          : "Event Get Failed. Please try again."
+      }`,
+    };
+  }
+};
+
+export const getHostEvents = async () => {
+  try {
+    const res = await serverFetch.get("/event/my-events?isDeleted=false");
+    const result = await res.json();
+    console.log(result);
+
+    return result;
+  } catch (error: any) {
+    if (error?.digest?.startsWith("NEXT_REDIRECT")) {
+      throw error;
+    }
+    console.log(error);
+    return {
+      success: false,
+      message: `${
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Event get Failed. Please try again."
+      }`,
+    };
+  }
+};
+
+export const getEventById = async (id: string) => {
+  try {
+    const res = await serverFetch.get(`/event/${id}`);
+    return res.json();
+  } catch (error: any) {
+    if (error?.digest?.startsWith("NEXT_REDIRECT")) {
+      throw error;
+    }
+    console.log(error);
+    return {
+      success: false,
+      message: `${
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Event Fetch Failed. Please try again."
       }`,
     };
   }
@@ -109,20 +154,20 @@ export const updateEvent = async (
     };
 
     if (
-      zodValidator(payload, createEventValidationZodSchema).success === false
+      zodValidator(payload, updateEventValidationZodSchema).success === false
     ) {
-      return zodValidator(payload, createEventValidationZodSchema);
+      return zodValidator(payload, updateEventValidationZodSchema);
     }
 
     const validatedPayload: any = zodValidator(
       payload,
-      createEventValidationZodSchema,
+      updateEventValidationZodSchema,
     ).data;
 
     const eventData = {
       eventData: {
         eventName: validatedPayload.eventName,
-        date: validatedPayload.date,
+        date: new Date(validatedPayload.date),
         category: validatedPayload.category,
         description: validatedPayload.description,
         location: validatedPayload.location,
@@ -138,7 +183,6 @@ export const updateEvent = async (
       newFormData.append("file", formData.get("file") as Blob);
     }
     const res = await serverFetch.patch(`/event/${id}`, {
-      headers: { "Content-Type": "application/json" },
       body: newFormData,
     });
     const result = await res.json();
@@ -161,15 +205,12 @@ export const updateEvent = async (
 
 export const softDeleteEvent = async (id: string) => {
   try {
-    await serverFetch.patch(`/event/soft-delete/${id}`, {
+    const res = await serverFetch.patch(`/event/soft-delete/${id}`, {
       headers: { "Content-Type": "application/json" },
       body: null,
     });
-
-    return {
-      success: true,
-      message: "Event Delete",
-    };
+    const result = await res.json();
+    return result;
   } catch (error: any) {
     if (error?.digest?.startsWith("NEXT_REDIRECT")) {
       throw error;

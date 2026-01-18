@@ -44,7 +44,7 @@ const UpdateEventFormDialog = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [state, formAction, isPending] = useActionState(
     isEdit ? updateEvent.bind(null, event.id!) : createEvent,
-    null
+    null,
   );
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -85,6 +85,7 @@ const UpdateEventFormDialog = ({
       }
     }
   }, [state, onSuccess, onClose, selectedFile]);
+  console.log(event?.date);
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -120,8 +121,13 @@ const UpdateEventFormDialog = ({
                 id="date"
                 name="date"
                 type="date"
-                defaultValue={event?.date || ""}
+                defaultValue={
+                  event?.date
+                    ? new Date(event.date).toISOString().split("T")[0]
+                    : new Date().toISOString().split("T")[0]
+                }
               />
+
               <InputFieldsError field="date" state={state} />
             </Field>
 
@@ -263,8 +269,8 @@ const UpdateEventFormDialog = ({
               {isPending
                 ? "Saving..."
                 : isEdit
-                ? "Update Doctor"
-                : "Create Doctor"}
+                  ? "Update Doctor"
+                  : "Create Doctor"}
             </Button>
           </div>
         </form>
