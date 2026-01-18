@@ -8,6 +8,7 @@ export interface IUser {
   location: ILocation;
   status: string;
   userProfile?: IUserProfile;
+  host?: IHost;
 }
 
 export interface ILocation {
@@ -30,4 +31,15 @@ export interface IUserProfile {
   email: string;
   bio: string;
   location: ILocation;
+}
+export interface IHost {
+  id?: string;
+  name: string;
+  photo?: string;
+  interests: UserInterests;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  bio: string;
+  status: string;
 }

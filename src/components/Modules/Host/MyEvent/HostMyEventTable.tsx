@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { hostMyEventColumns } from "./hostMyEventCall";
-import { deleteEvent } from "@/services/event/event.service";
+import { softDeleteEvent } from "@/services/event/event.service";
 import DeleteConfirmationDialog from "@/components/Shared/DeleteConfirmationDialog";
 import UpdateEventFormDialog from "./EditEventDIalog";
 
@@ -21,11 +21,7 @@ export default function HostMyEventsTable({ event = [] }: MyEventTableProps) {
   const [deletingEvent, setDeletingEvent] = useState<IEvent | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Custom wrapper to conditionally show edit action
   const handleEditClick = (event: IEvent) => {
-    // Cannot change status for:
-    // 1. Canceled appointments
-    // 2. Completed appointments with prescriptions
     if (event.status === EventStatus.CANCELLED) {
       toast.error("Cannot change status for canceled event", {
         description: "Canceled events are final and cannot be modified.",
@@ -50,7 +46,7 @@ export default function HostMyEventsTable({ event = [] }: MyEventTableProps) {
     if (!deletingEvent) return;
 
     setIsDeleting(true);
-    const result = await deleteEvent(deletingEvent.id!);
+    const result = await softDeleteEvent(deletingEvent.id!);
     setIsDeleting(false);
 
     if (result?.success) {
@@ -61,6 +57,7 @@ export default function HostMyEventsTable({ event = [] }: MyEventTableProps) {
       toast.error(result.message || "Failed to delete doctor");
     }
   };
+
   return (
     <>
       <ManagementTable

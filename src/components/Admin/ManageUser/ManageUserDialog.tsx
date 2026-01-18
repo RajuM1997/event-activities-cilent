@@ -16,7 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createEvent, updateEvent } from "@/services/event/event.service";
+import { updateUserStatue } from "@/services/admin/userManagement";
+import { createEvent } from "@/services/event/event.service";
 import { IUser } from "@/types/user.interface";
 import { useActionState, useEffect, useRef } from "react";
 import { toast } from "sonner";
@@ -39,8 +40,8 @@ const ManageUserDialog = ({
   const isEdit = !!user;
 
   const [state, formAction, isPending] = useActionState(
-    isEdit ? updateEvent.bind(null, user.id!) : createEvent,
-    null
+    isEdit ? updateUserStatue.bind(null, user.id!) : createEvent,
+    null,
   );
 
   const prevStateRef = useRef(state);

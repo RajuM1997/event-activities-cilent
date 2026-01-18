@@ -3,7 +3,6 @@ import { getAllUsers } from "@/services/admin/userManagement";
 
 const ManageUserPage = async () => {
   const { data } = await getAllUsers();
-  console.log(data);
 
   return (
     <div className="space-y-6 container mx-auto py-5">

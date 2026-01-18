@@ -1,9 +1,9 @@
 import { serverFetch } from "@/lib/server-fetch";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export const getAllUsers = async () => {
+export const getHosts = async () => {
   try {
-    const res = await serverFetch.get("/user?role=USER");
+    const res = await serverFetch.get("/user?role=HOST");
     return res.json();
   } catch (error: any) {
     if (error?.digest?.startsWith("NEXT_REDIRECT")) {
@@ -15,13 +15,13 @@ export const getAllUsers = async () => {
       message: `${
         process.env.NODE_ENV === "development"
           ? error.message
-          : "User Get Failed. Please try again."
+          : "Event Create Failed. Please try again."
       }`,
     };
   }
 };
 
-export const updateUserStatue = async (
+export const updateHostStatue = async (
   id: string,
   _currentState: any,
   formData: any,
@@ -29,7 +29,7 @@ export const updateUserStatue = async (
   try {
     const status = formData.get("status");
 
-    const res = await serverFetch.patch(`/user/user-status/${id}`, {
+    const res = await serverFetch.patch(`/user/host-status/${id}`, {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),
     });
@@ -45,7 +45,7 @@ export const updateUserStatue = async (
       message: `${
         process.env.NODE_ENV === "development"
           ? error.message
-          : "User Status Updated Failed. Please try again."
+          : "Host Status Updated Failed. Please try again."
       }`,
     };
   }

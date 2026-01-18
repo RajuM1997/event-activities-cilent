@@ -1,35 +1,31 @@
 "use client";
 
 import ManagementTable from "@/components/Shared/ManagementTable";
-import { EventStatus, IEvent } from "@/types/event.interface";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { deleteEvent } from "@/services/event/event.service";
-import DeleteConfirmationDialog from "@/components/Shared/DeleteConfirmationDialog";
+import { IUser } from "@/types/user.interface";
 import ManageHostDialog from "./ManageHostDialog";
 import { manageHostColumns } from "./manageHostColumns";
 
 interface MyEventTableProps {
-  event: IEvent[];
+  user: IUser[];
 }
 
-export default function ManageHostTable({ event = [] }: MyEventTableProps) {
+export default function ManageUserTable({ user = [] }: MyEventTableProps) {
   const router = useRouter();
   const [, startTransition] = useTransition();
-  const [editedEvent, setEditedEvent] = useState<IEvent | null>(null);
-  const [deletingEvent, setDeletingEvent] = useState<IEvent | null>(null);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [editedUser, setEditedUser] = useState<IUser | null>(null);
 
-  const handleEditClick = (event: IEvent) => {
-    if (event.status === EventStatus.CANCELLED) {
-      toast.error("Cannot change status for canceled event", {
-        description: "Canceled events are final and cannot be modified.",
+  const handleEditClick = (user: IUser) => {
+    if (user?.host?.status === "DELETE") {
+      toast.error("Cannot change status for deleted user", {
+        description: "deleted user are final and cannot be modified.",
       });
       return;
     }
 
-    setEditedEvent(event);
+    setEditedUser(user);
   };
 
   const handleRefresh = () => {
@@ -37,55 +33,24 @@ export default function ManageHostTable({ event = [] }: MyEventTableProps) {
       router.refresh();
     });
   };
-
-  const handleDelete = (event: IEvent) => {
-    setDeletingEvent(event);
-  };
-
-  const confirmDelete = async () => {
-    if (!deletingEvent) return;
-
-    setIsDeleting(true);
-    const result = await deleteEvent(deletingEvent.id!);
-    setIsDeleting(false);
-
-    if (result?.success) {
-      toast.success(result.message || "Event deleted successfully");
-      setDeletingEvent(null);
-      handleRefresh();
-    } else {
-      toast.error(result.message || "Failed to delete doctor");
-    }
-  };
   return (
     <>
       <ManagementTable
-        data={event}
+        data={user}
         columns={manageHostColumns}
-        onDelete={handleDelete}
         onEdit={handleEditClick}
-        getRowKey={(event) => event?.id as string}
-        emptyMessage="No Events found"
+        getRowKey={(user) => user?.id as string}
+        emptyMessage="No Host found"
       />
 
       <ManageHostDialog
-        open={!!editedEvent}
-        onClose={() => setEditedEvent(null)}
-        event={editedEvent!}
+        open={!!editedUser}
+        onClose={() => setEditedUser(null)}
+        user={editedUser!}
         onSuccess={() => {
-          setEditedEvent(null);
+          setEditedUser(null);
           handleRefresh();
         }}
-      />
-
-      {/* Delete Confirmation Dialog */}
-      <DeleteConfirmationDialog
-        open={!!deletingEvent}
-        onOpenChange={(open) => !open && setDeletingEvent(null)}
-        onConfirm={confirmDelete}
-        title="Delete Event"
-        description={`Are you sure you want to delete ${deletingEvent?.eventName}? This action cannot be undone.`}
-        isDeleting={isDeleting}
       />
     </>
   );

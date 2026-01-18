@@ -5,7 +5,7 @@ import { createEventValidationZodSchema } from "@/zod/event.validation";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const createEvent = async (
   _currentState: any,
-  formData: any
+  formData: any,
 ): Promise<any> => {
   try {
     const payload = {
@@ -27,7 +27,7 @@ export const createEvent = async (
 
     const validatedPayload: any = zodValidator(
       payload,
-      createEventValidationZodSchema
+      createEventValidationZodSchema,
     ).data;
 
     const eventData = {
@@ -91,12 +91,120 @@ export const getEvents = async () => {
   }
 };
 
-export const updateEvent = async (id: string) => {
-  console.log(id);
-  return { success: true, message: "update Successfully" };
+export const updateEvent = async (
+  id: string,
+  _currentState: any,
+  formData: any,
+) => {
+  try {
+    const payload = {
+      eventName: formData.get("eventName"),
+      date: formData.get("date"),
+      category: formData.get("category"),
+      location: formData.get("location"),
+      minParticipants: formData.get("minParticipants"),
+      maxParticipants: formData.get("maxParticipants"),
+      joiningFee: formData.get("joiningFee"),
+      description: formData.get("description"),
+    };
+
+    if (
+      zodValidator(payload, createEventValidationZodSchema).success === false
+    ) {
+      return zodValidator(payload, createEventValidationZodSchema);
+    }
+
+    const validatedPayload: any = zodValidator(
+      payload,
+      createEventValidationZodSchema,
+    ).data;
+
+    const eventData = {
+      eventData: {
+        eventName: validatedPayload.eventName,
+        date: validatedPayload.date,
+        category: validatedPayload.category,
+        description: validatedPayload.description,
+        location: validatedPayload.location,
+        minParticipants: Number(validatedPayload.minParticipants),
+        maxParticipants: Number(validatedPayload.maxParticipants),
+        joiningFee: Number(validatedPayload.joiningFee),
+      },
+    };
+
+    const newFormData = new FormData();
+    newFormData.append("data", JSON.stringify(eventData));
+    if (formData.get("file")) {
+      newFormData.append("file", formData.get("file") as Blob);
+    }
+    const res = await serverFetch.patch(`/event/${id}`, {
+      headers: { "Content-Type": "application/json" },
+      body: newFormData,
+    });
+    const result = await res.json();
+    return result;
+  } catch (error: any) {
+    if (error?.digest?.startsWith("NEXT_REDIRECT")) {
+      throw error;
+    }
+    console.log(error);
+    return {
+      success: false,
+      message: `${
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Event Updated Failed. Please try again."
+      }`,
+    };
+  }
+};
+
+export const softDeleteEvent = async (id: string) => {
+  try {
+    await serverFetch.patch(`/event/soft-delete/${id}`, {
+      headers: { "Content-Type": "application/json" },
+      body: null,
+    });
+
+    return {
+      success: true,
+      message: "Event Delete",
+    };
+  } catch (error: any) {
+    if (error?.digest?.startsWith("NEXT_REDIRECT")) {
+      throw error;
+    }
+    console.log(error);
+    return {
+      success: false,
+      message: `${
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Event Updated Failed. Please try again."
+      }`,
+    };
+  }
 };
 
 export const deleteEvent = async (id: string) => {
-  console.log(id);
-  return { success: true, message: "update Successfully" };
+  try {
+    await serverFetch.delete(`/event/${id}`);
+    return {
+      success: true,
+      message: "Event Delete",
+    };
+  } catch (error: any) {
+    if (error?.digest?.startsWith("NEXT_REDIRECT")) {
+      throw error;
+    }
+    console.log(error);
+    return {
+      success: false,
+      message: `${
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Event Delete Failed. Please try again."
+      }`,
+    };
+  }
 };
