@@ -11,8 +11,26 @@ export interface IEvent {
   status: EventStatus;
 }
 export enum EventStatus {
-  "OPEN",
-  "FULL",
-  "CANCELLED",
-  "COMPLETED",
+  OPEN = "OPEN",
+  FULL = "FULL",
+  CANCELLED = "CANCELLED",
+  COMPLETED = "COMPLETED",
+}
+
+export interface IBooking {
+  id: string;
+  bookingStatus: BookingStatus;
+  createdAt: string;
+  eventId: string;
+  status: EventStatus;
+  transactionId: string;
+  updatedAt: string;
+  amount: number;
+  eventName?: string;
+  date?: string;
+}
+
+export enum BookingStatus {
+  BOOKED = "BOOKED",
+  CANCELLED = "CANCELLED",
 }

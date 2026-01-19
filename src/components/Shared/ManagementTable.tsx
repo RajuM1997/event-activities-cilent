@@ -3,6 +3,7 @@ import {
   ArrowDown,
   ArrowUp,
   ArrowUpDown,
+  CircleX,
   Edit,
   Eye,
   Loader2,
@@ -40,6 +41,7 @@ interface ManagementTableProps<T> {
   onView?: (row: T) => void;
   onEdit?: (row: T) => void;
   onDelete?: (row: T) => void;
+  onCancel?: (row: T) => void;
   getRowKey: (row: T) => string;
   emptyMessage?: string;
   isRefreshing?: boolean;
@@ -52,10 +54,11 @@ function ManagementTable<T>({
   onEdit,
   onDelete,
   getRowKey,
+  onCancel,
   emptyMessage = "No records found.",
   isRefreshing = false,
 }: ManagementTableProps<T>) {
-  const hasActions = onView || onEdit || onDelete;
+  const hasActions = onView || onEdit || onDelete || onCancel;
   const router = useRouter();
   const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
@@ -180,6 +183,15 @@ function ManagementTable<T>({
                             >
                               <Trash className="mr-2 h-4 w-4" />
                               Delete
+                            </DropdownMenuItem>
+                          )}
+                          {onCancel && (
+                            <DropdownMenuItem
+                              onClick={() => onCancel(item)}
+                              className="text-destructive"
+                            >
+                              <CircleX className="mr-2 h-4 w-4" />
+                              Cancel Booking
                             </DropdownMenuItem>
                           )}
                         </DropdownMenuContent>

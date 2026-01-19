@@ -15,18 +15,22 @@ import {
 import { Menu } from "lucide-react";
 import { getCookie } from "@/services/auth/tokenHandlers";
 import LogoutButton from "./LogoutButton";
+import { getUserInfo } from "@/services/auth/getUserInfo";
 
 const PublicNavbar = async () => {
   const navItems = [
     { name: "Home", href: "/" },
     { name: "Explore Events", href: "/events" },
     { name: "Become a Host", href: "/become-a-host" },
-    { name: "My Events", href: "/host/my-events" },
-    { name: "Create Event", href: "/host/create-event" },
-    { name: "Dashboard", href: "/admin/dashboard" },
+    { name: "My Join Events", href: "/events/my-events" },
+    { name: "My Events", href: "/host/my-events", role: "HOST" },
+    { name: "Create Event", href: "/host/create-event", role: "HOST" },
+    { name: "Dashboard", href: "/admin/dashboard", role: "ADMIN" },
     { name: "Profile", href: "/profile" },
   ];
   const accessToken = await getCookie("accessToken");
+  const userInfo = await getUserInfo();
+
   return (
     <header className="sticky to-0 z-50 border-b w-full bg-background/95 px-4 backdrop-blur dark:bg-background/95">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -40,16 +44,20 @@ const PublicNavbar = async () => {
         </div>
         <nav className="hidden md:block">
           <ul className="flex gap-6">
-            {navItems.map((item) => (
-              <li key={item.name}>
-                <Link
-                  href={item.href}
-                  className="text-sm font-medium text-muted-foreground hover:text-primary"
-                >
-                  {item.name}
-                </Link>
-              </li>
-            ))}
+            {navItems.map((item) => {
+              return (
+                item?.role === userInfo.role && (
+                  <li key={item.name}>
+                    <Link
+                      href={item.href}
+                      className="text-sm font-medium text-muted-foreground hover:text-primary"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                )
+              );
+            })}
           </ul>
         </nav>
         <div className="hidden md:flex items-center space-x-2">

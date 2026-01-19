@@ -2,34 +2,25 @@
 
 import { Column } from "@/components/Shared/ManagementTable";
 import { Badge } from "@/components/ui/badge";
-import { EventStatus, IEvent } from "@/types/event.interface";
+import { BookingStatus, EventStatus, IBooking } from "@/types/event.interface";
 import { format } from "date-fns";
 
 const statusConfig: Record<
-  EventStatus,
+  BookingStatus,
   { variant: any; label: string; className?: string }
 > = {
-  [EventStatus.OPEN]: {
+  [BookingStatus.BOOKED]: {
     variant: "default",
-    label: "Open",
+    label: "Booked",
     className: "bg-blue-500 hover:bg-blue-600",
   },
-  [EventStatus.FULL]: {
-    variant: "secondary",
-    label: "Full",
-  },
-  [EventStatus.COMPLETED]: {
-    variant: "default",
-    label: "Completed",
-    className: "bg-green-500 hover:bg-green-600",
-  },
-  [EventStatus.CANCELLED]: {
+  [BookingStatus.CANCELLED]: {
     variant: "destructive",
     label: "Canceled",
   },
 };
 
-export const hostMyEventColumns: Column<IEvent>[] = [
+export const userJoinEventColumns: Column<IBooking>[] = [
   {
     header: "Event Name",
     accessor: (event) => (
@@ -66,48 +57,29 @@ export const hostMyEventColumns: Column<IEvent>[] = [
         </div>
       );
     },
-    sortKey: "event.date",
   },
   {
-    header: "Joining Fee",
+    header: "Amount",
     accessor: (event) => (
       <span className="text-sm p-2 font-semibold text-green-600">
-        ${event.joiningFee}
+        {event.amount}
       </span>
     ),
-    sortKey: "Join_Fee",
   },
   {
-    header: "Min Participants",
+    header: "Payment Status",
     accessor: (event) => (
       <span className="text-sm p-2 font-semibold text-base-600">
-        {event.minParticipants}
+        {event.status}
       </span>
     ),
-    sortKey: "minParticipants",
-  },
-  {
-    header: "Category",
-    accessor: (event) => (
-      <span className="text-sm p-2 font-semibold text-base-600">
-        {event.category}
-      </span>
-    ),
-    sortKey: "category",
-  },
-  {
-    header: "Max Participants",
-    accessor: (event) => (
-      <span className="text-sm p-2 font-semibold text-base-600">
-        {event.maxParticipants}
-      </span>
-    ),
-    sortKey: "maxParticipants",
   },
   {
     header: "Status",
-    accessor: (event) => {
-      const config = statusConfig[event.status];
+    accessor: (booking) => {
+      const config = statusConfig[booking.bookingStatus];
+      console.log(BookingStatus.BOOKED);
+
       return (
         <Badge variant={config?.variant} className={config?.className}>
           {config?.label}

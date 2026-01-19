@@ -1,6 +1,6 @@
 "use client";
 
-import { initiatePayment } from "@/services/payment/payment.service";
+import { initiatePayment } from "@/services/booking/booking.service";
 import { useState } from "react";
 import { toast } from "sonner";
 
