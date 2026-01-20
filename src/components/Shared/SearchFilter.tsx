@@ -4,6 +4,7 @@ import { Search } from "lucide-react";
 import { Input } from "../ui/input";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
+import { useDebounce } from "@/hooks/useDebounce";
 // import { useDebounce } from "@/hooks/useDebounce";
 
 interface SearchFilterProps {
@@ -19,8 +20,7 @@ const SearchFilter = ({
   const [isPending, startTransition] = useTransition();
   const searchParams = useSearchParams();
   const [value, setValue] = useState(searchParams.get(paramName) || "");
-  //   const debounceValue = useDebounce(value, 500);
-  const debounceValue = "";
+  const debounceValue = useDebounce(value, 500);
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
@@ -42,6 +42,7 @@ const SearchFilter = ({
       router.push(`?${params.toString()}`);
     });
   }, [debounceValue, paramName, searchParams, router]);
+  console.log({ debounceValue });
 
   return (
     <div className="relative">

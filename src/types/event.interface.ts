@@ -9,6 +9,7 @@ export interface IEvent {
   category: string;
   joiningFee: string;
   status: EventStatus;
+  image: string;
 }
 export enum EventStatus {
   OPEN = "OPEN",

@@ -17,7 +17,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 
 export const loginUser = async (
   _currentState: any,
-  formData: any
+  formData: any,
 ): Promise<any> => {
   try {
     const redirectTo = formData.get("redirect") || null;
@@ -34,7 +34,7 @@ export const loginUser = async (
 
     const validatedPayload = zodValidator(
       payload,
-      loginValidationZodSchema
+      loginValidationZodSchema,
     ).data;
 
     const res = await serverFetch.post("/auth/login", {
@@ -85,8 +85,8 @@ export const loginUser = async (
     });
 
     const verifiedToken: JwtPayload | string = jwt.verify(
-      accessTokenObject.accessToken,
-      process.env.JWT_SECRET as string
+      accessTokenObject.JWT_ACCESS_SECRET,
+      process.env.JWT_SECRET as string,
     );
 
     if (typeof verifiedToken === "string") {

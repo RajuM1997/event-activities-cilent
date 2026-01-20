@@ -72,9 +72,24 @@ export const createEvent = async (
   }
 };
 
-export const getEvents = async () => {
+export const getEvents = async (queryString?: string) => {
   try {
-    const res = await serverFetch.get("/event");
+    const searchParams = new URLSearchParams(queryString);
+    const page = searchParams.get("page") || "1";
+    const searchTerm = searchParams.get("searchTerm") || "all";
+
+    const res = await serverFetch.get(
+      `/event${queryString ? `?${queryString}` : ""}`,
+      {
+        next: {
+          tags: [
+            "event-list",
+            `event-page-${page}`,
+            `event-search-${searchTerm}`,
+          ],
+        },
+      },
+    );
     const result = await res.json();
     return result;
   } catch (error: any) {
