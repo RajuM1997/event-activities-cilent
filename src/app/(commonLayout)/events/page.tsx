@@ -20,7 +20,7 @@ const EventPage = async ({
           <EventSearchOption />
         </div>
         <div className="grid gap-6 md:grid-cols-3">
-          {data.map((event: IEvent) => (
+          {data?.map((event: IEvent) => (
             <EventCard event={event} key={event.eventName} />
           ))}
         </div>

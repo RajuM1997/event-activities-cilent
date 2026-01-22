@@ -6,7 +6,7 @@ import {
   getRouteOwner,
   isAuthRoute,
   UserRole,
-} from "./lib/auth-utlis";
+} from "./lib/auth-utils";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { getUserInfo } from "./services/auth/getUserInfo";
 

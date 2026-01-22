@@ -3,8 +3,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, PlusCircle } from "lucide-react";
 import banner from "@/assets/banner.webp";
+import { IUser } from "@/types/user.interface";
 
-export default function HeroSection() {
+export default function HeroSection({ user }: { user: IUser }) {
   return (
     <section className="relative h-[90vh] min-h-150 overflow-hidden">
       {/* Background Image */}
@@ -51,15 +52,17 @@ export default function HeroSection() {
                 </Button>
               </Link>
 
-              <Link href="/create-event">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="gap-2 border-primary text-primary hover:bg-white hover:text-black"
-                >
-                  Create Event <PlusCircle className="h-4 w-4" />
-                </Button>
-              </Link>
+              {user.role === "HOST" && (
+                <Link href="/create-event">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="gap-2 border-primary text-primary hover:bg-white hover:text-black"
+                  >
+                    Create Event <PlusCircle className="h-4 w-4" />
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
         </div>

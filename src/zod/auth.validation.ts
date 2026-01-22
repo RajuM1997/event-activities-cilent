@@ -28,6 +28,22 @@ export const registerUserValidationZodSchema = z
     path: ["confirmPassword"],
   });
 
+export const updateUserUserValidationZodSchema = z.object({
+  name: z.string().optional(),
+  bio: z.string().optional(),
+  interests: z.string().optional(),
+  city: z.string().optional(),
+  area: z.string().optional(),
+  country: z.string().optional(),
+});
+
+export const updateHostUserValidationZodSchema = z.object({
+  name: z.string().optional(),
+  bio: z.string().optional(),
+  address: z.string().optional(),
+  phoneNumber: z.string().optional(),
+});
+
 export const registerHostValidationZodSchema = z
   .object({
     name: z.string().min(1, { message: "Name is required" }),

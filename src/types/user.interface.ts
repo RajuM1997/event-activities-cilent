@@ -1,7 +1,10 @@
+import { UserRole } from "../lib/auth-utils";
 export interface IUser {
   id?: string;
   name: string;
   photo?: string;
+  role?: UserRole;
+  profilePhoto?: string;
   interests: UserInterests;
   email: string;
   bio: string;
@@ -9,6 +12,7 @@ export interface IUser {
   status: string;
   userProfile?: IUserProfile;
   host?: IHost;
+  isDeleted: boolean;
 }
 
 export interface ILocation {
@@ -18,11 +22,11 @@ export interface ILocation {
 }
 
 export enum UserInterests {
-  Sports,
-  Gaming,
-  Art,
-  Travel,
-  Fitness,
+  Sports = "Sports",
+  Gaming = "Gaming",
+  Art = "Art",
+  Travel = "Travel",
+  Fitness = "Fitness",
 }
 export interface IUserProfile {
   name: string;

@@ -12,7 +12,7 @@ import {
   getDefaultDashboardRoute,
   isValidRedirectForRole,
   UserRole,
-} from "@/lib/auth-utlis";
+} from "@/lib/auth-utils";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 export const loginUser = async (
