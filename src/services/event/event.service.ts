@@ -108,7 +108,7 @@ export const getEvents = async (queryString?: string) => {
   }
 };
 
-export const getHostEvents = async () => {
+export const getHostEvents = async (queryString?: string) => {
   try {
     const res = await serverFetch.get("/event/my-events?isDeleted=false");
     const result = await res.json();

@@ -1,7 +1,7 @@
 import { serverFetch } from "@/lib/server-fetch";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export const getHosts = async () => {
+export const getHosts = async (_queryString?: string) => {
   try {
     const res = await serverFetch.get("/user?role=HOST");
     return res.json();
