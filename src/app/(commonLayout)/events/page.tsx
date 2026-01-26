@@ -15,16 +15,34 @@ const EventPage = async ({
   const { data, meta } = await getEvents(queryString);
 
   return (
-    <section className="py-16">
+    <section className="py-16 ">
       <div className="container mx-auto px-4">
-        <div className="pb-15">
-          <EventSearchOption />
+        <div className="text-center lg:px-30 py-5">
+          <h2 className="text-3xl font-bold pb-5">
+            Find Your Next Event with JoinUp
+          </h2>
+          <p>
+            JoinUp brings people together through events you’ll love. Browse
+            concerts, comedy shows, movie nights, and developer meetups—all in
+            one place. Pick an event, join in, and connect with your community.
+          </p>
         </div>
+        {data.length > 0 && (
+          <div className="pb-15">
+            <EventSearchOption />
+          </div>
+        )}
         <div className="grid gap-6 md:grid-cols-3">
-          {data?.map((event: IEvent) => (
-            <EventCard event={event} key={event.eventName} />
-          ))}
+          {data.length > 0 &&
+            data?.map((event: IEvent) => (
+              <EventCard event={event} key={event.eventName} />
+            ))}
         </div>
+        {data.length === 0 && (
+          <p className="text-xl text-center p-5 h-full flex justify-center items-center">
+            No events found. Check back soon for upcoming events!
+          </p>
+        )}
         {meta?.totalPages > 1 && (
           <section className="pt-5">
             <Pagination

@@ -1,3 +1,4 @@
+"use server";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { serverFetch } from "@/lib/server-fetch";
@@ -5,10 +6,11 @@ import { zodValidator } from "@/lib/zodValidator";
 import { IUser } from "@/types/user.interface";
 import { registerUserValidationZodSchema } from "@/zod/auth.validation";
 import { loginUser } from "./loginUser";
+import { revalidateTag } from "next/cache";
 
 export const registerUser = async (
   _currentState: any,
-  formData: any
+  formData: any,
 ): Promise<any> => {
   try {
     const payload = {
@@ -31,7 +33,7 @@ export const registerUser = async (
 
     const validatedPayload: IUser | any = zodValidator(
       payload,
-      registerUserValidationZodSchema
+      registerUserValidationZodSchema,
     ).data;
 
     const registerData = {
@@ -60,6 +62,7 @@ export const registerUser = async (
     });
     const result = await res.json();
     if (result.success) {
+      revalidateTag("user-info", { expire: 0 });
       await loginUser(_currentState, formData);
     }
     return result;

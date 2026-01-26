@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { serverFetch } from "@/lib/server-fetch";
 import { zodValidator } from "@/lib/zodValidator";
 import {
@@ -108,11 +109,10 @@ export const getEvents = async (queryString?: string) => {
   }
 };
 
-export const getHostEvents = async (queryString?: string) => {
+export const getHostEvents = async (_queryString?: string) => {
   try {
     const res = await serverFetch.get("/event/my-events?isDeleted=false");
     const result = await res.json();
-    console.log(result);
 
     return result;
   } catch (error: any) {

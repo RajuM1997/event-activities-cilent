@@ -20,9 +20,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { updateUserProfile } from "@/services/auth/updateUser";
-import { createEvent } from "@/services/event/event.service";
+import {
+  updateHostProfile,
+  updateUserProfile,
+} from "@/services/auth/updateUser";
 import { IUser } from "@/types/user.interface";
+import { Edit } from "lucide-react";
 import Image from "next/image";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -46,7 +49,7 @@ const UpdateUserFormDialog = ({
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [state, formAction, isPending] = useActionState(
-    isEdit ? updateUserProfile.bind(null, user.id!) : createEvent,
+    user.role === "USER" ? updateUserProfile : updateHostProfile,
     null,
   );
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,8 +91,22 @@ const UpdateUserFormDialog = ({
       }
     }
   }, [state, onSuccess, onClose, selectedFile]);
-  console.log({ isEdit });
 
+  // Preview source (string only)
+  const previewSrc: string | undefined = selectedFile
+    ? URL.createObjectURL(selectedFile)
+    : user.role === "HOST"
+      ? user.host?.profilePhoto
+      : user.profilePhoto;
+
+  // Cleanup object URL (important)
+  useEffect(() => {
+    return () => {
+      if (selectedFile) {
+        URL.revokeObjectURL(previewSrc!);
+      }
+    };
+  }, [selectedFile, previewSrc]);
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="max-h-[90vh] flex flex-col p-0">
@@ -104,127 +121,235 @@ const UpdateUserFormDialog = ({
           action={formAction}
           className="flex flex-col flex-1 min-h-0"
         >
-          <div className="flex-1 overflow-y-auto px-6 space-y-4 pb-4">
-            {/* event name */}
-            <Field>
-              <FieldLabel htmlFor="eventName">Name</FieldLabel>
-              <Input
-                id="eventName"
-                name="eventName"
-                type="text"
-                placeholder="Write your event name here"
-                defaultValue={user?.name}
-              />
+          {user.role === "HOST" ? (
+            <div className="flex-1 overflow-y-auto px-6 space-y-4 pb-4">
+              {/* file */}
+              <Field className="mx-auto">
+                <div className="relative w-28 h-28">
+                  {/* Avatar */}
+                  <div className="relative w-28 h-28 rounded-full overflow-hidden border bg-gray-100 mx-auto">
+                    {previewSrc ? (
+                      <Image
+                        src={previewSrc}
+                        alt="Profile Photo"
+                        fill
+                        className="object-cover mx-auto"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-gray-500 text-sm">
+                        No Photo
+                      </div>
+                    )}
+                    <label htmlFor="file">
+                      <Edit className="text-primary absolute z-5 left-4 top-5" />
+                    </label>
+                  </div>
+                </div>
 
-              <InputFieldsError field="name" state={state} />
-            </Field>
-
-            {/* city */}
-            <Field>
-              <FieldLabel htmlFor="city">City</FieldLabel>
-              <Input
-                id="city"
-                name="city"
-                type="text"
-                placeholder="Type your city here"
-                defaultValue={user?.location?.city || ""}
-              />
-
-              <InputFieldsError field="name" state={state} />
-            </Field>
-            {/* area */}
-            <Field>
-              <FieldLabel htmlFor="area">Area</FieldLabel>
-              <Input
-                id="area"
-                name="area"
-                type="text"
-                placeholder="Type your area here"
-                defaultValue={user?.location?.area || ""}
-              />
-
-              <InputFieldsError field="name" state={state} />
-            </Field>
-
-            {/* country */}
-            <Field>
-              <FieldLabel htmlFor="country">Country</FieldLabel>
-              <Input
-                id="country"
-                name="country"
-                type="text"
-                placeholder="Type your country here"
-                defaultValue={user?.location?.country || ""}
-              />
-
-              <InputFieldsError field="name" state={state} />
-            </Field>
-
-            {/* interests */}
-            <Field>
-              <FieldLabel htmlFor="interests">Interests</FieldLabel>
-              <Select name="interests" defaultValue={user?.interests}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a Interests" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Interests</SelectLabel>
-                    <SelectItem value="Sports">Sports</SelectItem>
-                    <SelectItem value="Gaming">Gaming</SelectItem>
-                    <SelectItem value="Art">Art</SelectItem>
-                    <SelectItem value="Travel">Travel</SelectItem>
-                    <SelectItem value="Fitness">Fitness</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <InputFieldsError field="interests" state={state} />
-            </Field>
-
-            {/* bio */}
-            <Field>
-              <FieldLabel htmlFor="bio">Bio</FieldLabel>
-              <Textarea
-                defaultValue={user?.bio || ""}
-                id="bio"
-                name="bio"
-                placeholder="Type your Bio here."
-              />
-              <InputFieldsError field="bio" state={state} />
-            </Field>
-
-            {/* file */}
-            <Field>
-              <FieldLabel htmlFor="file">Cover Photo</FieldLabel>
-              {selectedFile && (
-                <Image
-                  //get from state if available
-                  src={
-                    typeof selectedFile === "string"
-                      ? selectedFile
-                      : URL.createObjectURL(selectedFile)
-                  }
-                  alt="Profile Photo Preview"
-                  width={50}
-                  height={50}
-                  className="mb-2 rounded-full"
+                {/* Hidden file input */}
+                <Input
+                  ref={fileInputRef}
+                  id="file"
+                  name="file"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleFileChange}
                 />
-              )}
 
-              <Input
-                ref={fileInputRef}
-                id="file"
-                name="file"
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Upload a profile photo for the doctor
-              </p>
-              <InputFieldsError state={state} field="profilePhoto" />
-            </Field>
-          </div>
+                <InputFieldsError field="profilePhoto" state={state} />
+              </Field>
+              {/* user name */}
+              <Field>
+                <FieldLabel htmlFor="name">Name</FieldLabel>
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="Write your user name here"
+                  defaultValue={user?.host?.name}
+                />
+
+                <InputFieldsError field="name" state={state} />
+              </Field>
+
+              {/* address */}
+              <Field>
+                <FieldLabel htmlFor="address">Address</FieldLabel>
+                <Input
+                  id="address"
+                  name="address"
+                  type="text"
+                  placeholder="Type your address here"
+                  defaultValue={user?.host?.address || ""}
+                />
+
+                <InputFieldsError field="address" state={state} />
+              </Field>
+
+              {/* phone */}
+              <Field>
+                <FieldLabel htmlFor="phoneNumber">Phone Number</FieldLabel>
+                <Input
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  type="text"
+                  placeholder="Type your phoneNumber here"
+                  defaultValue={user?.host?.phoneNumber || ""}
+                />
+
+                <InputFieldsError field="phoneNumber" state={state} />
+              </Field>
+
+              {/* bio */}
+              <Field>
+                <FieldLabel htmlFor="bio">Bio</FieldLabel>
+                <Textarea
+                  defaultValue={user?.host?.bio || ""}
+                  id="bio"
+                  name="bio"
+                  placeholder="Type your Bio here."
+                />
+                <InputFieldsError field="bio" state={state} />
+              </Field>
+            </div>
+          ) : (
+            <div className="flex-1 overflow-y-auto px-6 space-y-4 pb-4">
+              {/* user name */}
+              <Field>
+                <FieldLabel htmlFor="name">Name</FieldLabel>
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="Write your user name here"
+                  defaultValue={user?.name}
+                />
+
+                <InputFieldsError field="name" state={state} />
+              </Field>
+
+              {/* city */}
+              <Field>
+                <FieldLabel htmlFor="city">City</FieldLabel>
+                <Input
+                  id="city"
+                  name="city"
+                  type="text"
+                  placeholder="Type your city here"
+                  defaultValue={user?.location?.city || ""}
+                />
+
+                <InputFieldsError field="city" state={state} />
+              </Field>
+              {/* area */}
+              <Field>
+                <FieldLabel htmlFor="area">Area</FieldLabel>
+                <Input
+                  id="area"
+                  name="area"
+                  type="text"
+                  placeholder="Type your area here"
+                  defaultValue={user?.location?.area || ""}
+                />
+
+                <InputFieldsError field="area" state={state} />
+              </Field>
+
+              {/* country */}
+              <Field>
+                <FieldLabel htmlFor="country">Country</FieldLabel>
+                <Input
+                  id="country"
+                  name="country"
+                  type="text"
+                  placeholder="Type your country here"
+                  defaultValue={user?.location?.country || ""}
+                />
+
+                <InputFieldsError field="country" state={state} />
+              </Field>
+
+              {/* interests */}
+              <Field>
+                <FieldLabel htmlFor="interests">Interests</FieldLabel>
+                <Select name="interests" defaultValue={user?.interests}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a Interests" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Interests</SelectLabel>
+                      <SelectItem value="Sports">Sports</SelectItem>
+                      <SelectItem value="Gaming">Gaming</SelectItem>
+                      <SelectItem value="Art">Art</SelectItem>
+                      <SelectItem value="Travel">Travel</SelectItem>
+                      <SelectItem value="Fitness">Fitness</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <InputFieldsError field="interests" state={state} />
+              </Field>
+
+              {/* bio */}
+              <Field>
+                <FieldLabel htmlFor="bio">Bio</FieldLabel>
+                <Textarea
+                  defaultValue={user?.bio || ""}
+                  id="bio"
+                  name="bio"
+                  placeholder="Type your Bio here."
+                />
+                <InputFieldsError field="bio" state={state} />
+              </Field>
+
+              {/* file */}
+              <Field>
+                <FieldLabel>Profile Photo</FieldLabel>
+
+                <div className="relative w-28 h-28">
+                  {/* Avatar */}
+                  <div className="relative w-28 h-28 rounded-full overflow-hidden border bg-gray-100">
+                    {previewSrc ? (
+                      <Image
+                        src={previewSrc}
+                        alt="Profile Photo"
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-gray-500 text-sm">
+                        No Photo
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Edit overlay */}
+                  <label
+                    htmlFor="file"
+                    className="absolute inset-0 flex items-center justify-center
+          rounded-full bg-black/40 text-white text-sm font-medium
+          opacity-0 hover:opacity-100 cursor-pointer transition"
+                  >
+                    Edit
+                  </label>
+                </div>
+
+                {/* Hidden file input */}
+                <Input
+                  ref={fileInputRef}
+                  id="file"
+                  name="file"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+
+                <InputFieldsError field="profilePhoto" state={state} />
+              </Field>
+            </div>
+          )}
 
           <div className="flex justify-end gap-2 px-6 py-4 border-t bg-gray-50">
             <Button
@@ -236,11 +361,7 @@ const UpdateUserFormDialog = ({
               Cancel
             </Button>
             <Button type="submit" disabled={isPending}>
-              {isPending
-                ? "Saving..."
-                : isEdit
-                  ? "Update Doctor"
-                  : "Create Doctor"}
+              {isPending ? "Saving..." : isEdit ? "Update User" : "Create User"}
             </Button>
           </div>
         </form>

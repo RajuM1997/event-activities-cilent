@@ -10,8 +10,8 @@ const PublicNavbar = async () => {
   const navItems = [
     { name: "Home", href: "/" },
     { name: "Explore Events", href: "/events" },
-    { name: "Become a Host", href: "/become-a-host" },
-    { name: "My Join Events", href: "/events/my-events" },
+    { name: "Become a Host", href: "/become-a-host", role: "PUBLIC" },
+    { name: "My Join Events", href: "/events/my-events", role: "PUBLIC" },
     { name: "My Events", href: "/host/my-events", role: "HOST" },
     { name: "Create Event", href: "/host/create-event", role: "HOST" },
     { name: "Dashboard", href: "/admin/dashboard", role: "ADMIN" },
@@ -34,8 +34,17 @@ const PublicNavbar = async () => {
         <nav className="hidden md:block">
           <ul className="flex gap-6">
             {navItems.map((item) => {
-              return (
-                item?.role === userInfo.role && (
+              return item?.role === userInfo.role ? (
+                <li key={item.name}>
+                  <Link
+                    href={item.href}
+                    className="text-sm font-medium text-muted-foreground hover:text-primary"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ) : (
+                !item.role && userInfo && (
                   <li key={item.name}>
                     <Link
                       href={item.href}

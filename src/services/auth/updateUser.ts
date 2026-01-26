@@ -1,3 +1,4 @@
+"use server";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { serverFetch } from "@/lib/server-fetch";
@@ -7,6 +8,7 @@ import {
   updateHostUserValidationZodSchema,
   updateUserUserValidationZodSchema,
 } from "@/zod/auth.validation";
+import { revalidateTag } from "next/cache";
 
 export const updateUserProfile = async (
   _currentState: any,
@@ -15,7 +17,6 @@ export const updateUserProfile = async (
   try {
     const payload = {
       name: formData.get("name"),
-      email: formData.get("email"),
       bio: formData.get("bio"),
       interests: formData.get("interests"),
       city: formData.get("city"),
@@ -35,7 +36,6 @@ export const updateUserProfile = async (
     ).data;
 
     const registerData = {
-      password: validatedPayload.password,
       userData: {
         name: validatedPayload.name,
         bio: validatedPayload.bio,
@@ -53,10 +53,13 @@ export const updateUserProfile = async (
     if (formData.get("file")) {
       newFormData.append("file", formData.get("file") as Blob);
     }
-    const res = await serverFetch.patch("/user/update-profile", {
+    const res = await serverFetch.patch("/user/update-user-profile", {
       body: newFormData,
     });
     const result = await res.json();
+    if (result.success) {
+      revalidateTag("user-info", { expire: 0 });
+    }
     return result;
   } catch (error: any) {
     if (error?.digest?.startsWith("NEXT_REDIRECT")) {
@@ -80,10 +83,10 @@ export const updateHostProfile = async (
 ): Promise<any> => {
   try {
     const payload = {
-      name: formData.get("name"),
-      bio: formData.get("bio"),
-      address: formData.get("address"),
-      phoneNumber: formData.get("phoneNumber"),
+      name: formData?.get("name"),
+      bio: formData?.get("bio"),
+      address: formData?.get("address"),
+      phoneNumber: formData?.get("phoneNumber"),
     };
 
     if (
@@ -111,10 +114,13 @@ export const updateHostProfile = async (
     if (formData.get("file")) {
       newFormData.append("file", formData.get("file") as Blob);
     }
-    const res = await serverFetch.patch("/user/update-profile", {
+    const res = await serverFetch.patch("/user/update-host-profile", {
       body: newFormData,
     });
     const result = await res.json();
+    if (result.success) {
+      revalidateTag("user-info", { expire: 0 });
+    }
     return result;
   } catch (error: any) {
     if (error?.digest?.startsWith("NEXT_REDIRECT")) {

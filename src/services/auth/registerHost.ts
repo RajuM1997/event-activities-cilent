@@ -1,3 +1,4 @@
+"use server";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { serverFetch } from "@/lib/server-fetch";
@@ -5,10 +6,11 @@ import { zodValidator } from "@/lib/zodValidator";
 import { IUser } from "@/types/user.interface";
 import { registerHostValidationZodSchema } from "@/zod/auth.validation";
 import { loginUser } from "./loginUser";
+import { revalidateTag } from "next/cache";
 
 export const registerHost = async (
   _currentState: any,
-  formData: any
+  formData: any,
 ): Promise<any> => {
   try {
     const payload = {
@@ -20,9 +22,6 @@ export const registerHost = async (
       address: formData.get("address"),
       phoneNumber: formData.get("phoneNumber"),
     };
-    console.log({ payload });
-
-    console.log(payload, registerHostValidationZodSchema);
 
     if (
       zodValidator(payload, registerHostValidationZodSchema).success === false
@@ -32,7 +31,7 @@ export const registerHost = async (
 
     const validatedPayload: IUser | any = zodValidator(
       payload,
-      registerHostValidationZodSchema
+      registerHostValidationZodSchema,
     ).data;
 
     const registerData = {
@@ -46,8 +45,6 @@ export const registerHost = async (
         phoneNumber: validatedPayload.phoneNumber,
       },
     };
-    console.log(registerData);
-
     const newFormData = new FormData();
     newFormData.append("data", JSON.stringify(registerData));
     if (formData.get("file")) {
@@ -58,6 +55,7 @@ export const registerHost = async (
     });
     const result = await res.json();
     if (result.success) {
+      revalidateTag("user-info", { expire: 0 });
       await loginUser(_currentState, formData);
     }
     return result;

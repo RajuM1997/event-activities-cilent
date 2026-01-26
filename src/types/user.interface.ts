@@ -2,10 +2,9 @@ import { UserRole } from "../lib/auth-utils";
 export interface IUser {
   id?: string;
   name: string;
-  photo?: string;
   role?: UserRole;
-  profilePhoto?: string;
   interests: UserInterests;
+  profilePhoto?: string;
   email: string;
   bio: string;
   location: ILocation;
@@ -30,7 +29,6 @@ export enum UserInterests {
 }
 export interface IUserProfile {
   name: string;
-  photo?: string;
   interests: UserInterests;
   email: string;
   bio: string;
@@ -39,7 +37,8 @@ export interface IUserProfile {
 export interface IHost {
   id?: string;
   name: string;
-  photo?: string;
+  profilePhoto?: string;
+  averageRating?: number;
   interests: UserInterests;
   email: string;
   phoneNumber: string;
