@@ -162,6 +162,29 @@ const ProfileComponent = ({
                     {user?.interests || "No interests added."}
                   </p>
                 </div>
+                {/* City */}
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">City</h3>
+                  <p className="text-gray-700">
+                    {user?.location?.city || "No City added."}
+                  </p>
+                </div>
+
+                {/* Area */}
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Area</h3>
+                  <p className="text-gray-700">
+                    {user?.location?.area || "No area added."}
+                  </p>
+                </div>
+
+                {/* Country */}
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Country</h3>
+                  <p className="text-gray-700">
+                    {user?.location?.country || "No country added."}
+                  </p>
+                </div>
               </div>
 
               {/* Actions */}

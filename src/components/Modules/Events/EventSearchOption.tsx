@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 const EventSearchOption = () => {
   return (
     <div
-      className="space-y-5 md:h-30 bg-primary/10 flex items-center px-5 rounded-lg "
+      className="space-y-5 w-fit mx-auto md:h-50 lg:h-40 bg-primary/10 flex justify-center items-center px-5 lg:px-20 rounded-lg h-80 py-5 "
       style={{ boxShadow: "0 4px 4px rgba(0,0,0,.25)" }}
     >
       {/* Row 1: Refresh Button */}
@@ -17,9 +17,7 @@ const EventSearchOption = () => {
       {/* Row 2: Filter Controls */}
       <div className="flex items-center gap-3 flex-wrap">
         <div>
-          <Label style={{ visibility: "hidden" }} className="pb-2">
-            d
-          </Label>
+          <Label className="pb-2">Location</Label>
           <SearchFilter
             paramName="location"
             placeholder="type event location"
@@ -28,32 +26,11 @@ const EventSearchOption = () => {
 
         {/* Category Filter */}
         <div>
-          <Label style={{ visibility: "hidden" }} className="pb-2">
-            d
-          </Label>
+          <Label className="pb-2">Category</Label>
           <SelectFilter
             paramName="category"
             placeholder="Event Category"
             defaultValue="All Event"
-            options={[
-              { label: "Concert", value: "Concert" },
-              { label: "Live Music", value: "Live_Music" },
-              { label: "Movie Night", value: "Movie_Night" },
-              { label: "Stand Up Comedy", value: "Stand_up_Comedy" },
-              { label: "Theater", value: "Theater" },
-            ]}
-          />
-        </div>
-
-        {/* Category Filter */}
-        <div>
-          <Label style={{ visibility: "hidden" }} className="pb-2">
-            d
-          </Label>
-          <SelectFilter
-            paramName="interests"
-            placeholder="Interests"
-            defaultValue="All Interests"
             options={[
               { label: "Concert", value: "Concert" },
               { label: "Live Music", value: "Live_Music" },
@@ -74,12 +51,6 @@ const EventSearchOption = () => {
           </Label>
           <ClearFiltersButton />
         </div>
-        {/* <div className="">
-          <Label style={{ visibility: "hidden" }} className="pb-2">
-            d
-          </Label>
-          <RefreshButton />
-        </div> */}
       </div>
     </div>
   );

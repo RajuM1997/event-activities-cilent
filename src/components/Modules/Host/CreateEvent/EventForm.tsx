@@ -43,13 +43,14 @@ const CreateEventForm = () => {
 
             <InputFieldsError field="eventName" state={state} />
           </Field>
+
           {/* date */}
           <Field>
             <FieldLabel htmlFor="date">Date</FieldLabel>
             <Input
               id="date"
               name="date"
-              type="date"
+              type="datetime-local"
               defaultValue={state?.formData?.date || ""}
             />
             <InputFieldsError field="date" state={state} />
@@ -103,6 +104,7 @@ const CreateEventForm = () => {
             />
             <InputFieldsError field="joiningFee" state={state} />
           </Field>
+
           {/* category */}
           <Field>
             <FieldLabel htmlFor="category">Category</FieldLabel>
@@ -120,6 +122,15 @@ const CreateEventForm = () => {
                     Stand up Comedy
                   </SelectItem>
                   <SelectItem value="Theater">Theater</SelectItem>
+                  <SelectItem value="Hackathon">Hackathon</SelectItem>
+                  <SelectItem value="Dev_Meetup">Dev Meetup</SelectItem>
+                  <SelectItem value="Tech_Talk">Tech Talk</SelectItem>
+                  <SelectItem value="Coding_Workshop">
+                    Coding Workshop
+                  </SelectItem>
+                  <SelectItem value="Networking_Event">
+                    Networking_Event
+                  </SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>

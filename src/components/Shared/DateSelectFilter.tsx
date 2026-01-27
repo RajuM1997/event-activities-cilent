@@ -14,6 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Field, FieldLabel } from "../ui/field";
 
 interface DateTimeFilterProps {
   dateParam?: string; // ?date=
@@ -55,45 +56,10 @@ const DateTimeFilter = ({
     <div className="flex gap-4">
       {/* Date Picker */}
       <div className="flex flex-col gap-2">
-        <Label>Date</Label>
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              className="w-36 justify-between font-normal"
-              disabled={isPending}
-            >
-              {selectedDate ? selectedDate.toLocaleDateString() : "Select date"}
-              <ChevronDownIcon className="h-4 w-4 opacity-60" />
-            </Button>
-          </PopoverTrigger>
-
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={selectedDate}
-              captionLayout="dropdown"
-              onSelect={(date) => {
-                if (!date) return;
-                updateParams(dateParam, date.toISOString().split("T")[0]);
-                setOpen(false);
-              }}
-            />
-          </PopoverContent>
-        </Popover>
-      </div>
-
-      {/* Time Picker */}
-      <div className="flex flex-col gap-2">
-        <Label>Time</Label>
-        <Input
-          type="time"
-          value={timeValue ?? ""}
-          disabled={isPending}
-          onChange={(e) => updateParams(timeParam, e.target.value)}
-          className="bg-background appearance-none
-            [&::-webkit-calendar-picker-indicator]:hidden"
-        />
+        <Field>
+          <FieldLabel htmlFor="date">Date</FieldLabel>
+          <Input id="date" name="date" type="datetime-local" />
+        </Field>
       </div>
     </div>
   );

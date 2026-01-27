@@ -99,7 +99,6 @@ const UpdateUserFormDialog = ({
       ? user.host?.profilePhoto
       : user.profilePhoto;
 
-  // Cleanup object URL (important)
   useEffect(() => {
     return () => {
       if (selectedFile) {
@@ -107,6 +106,7 @@ const UpdateUserFormDialog = ({
       }
     };
   }, [selectedFile, previewSrc]);
+
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="max-h-[90vh] flex flex-col p-0">
@@ -215,6 +215,46 @@ const UpdateUserFormDialog = ({
             </div>
           ) : (
             <div className="flex-1 overflow-y-auto px-6 space-y-4 pb-4">
+              {/* file */}
+              <Field className="mx-auto">
+                <div className="relative w-28 h-28">
+                  {/* Avatar */}
+                  <div className="relative w-28 h-28 rounded-full overflow-hidden border bg-gray-100 mx-auto">
+                    {previewSrc ? (
+                      <Image
+                        src={previewSrc}
+                        alt="Profile Photo"
+                        fill
+                        className="object-cover mx-auto"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-gray-500 text-sm">
+                        No Photo
+                      </div>
+                    )}
+                    <div className="absolute top-0 left-0 bg-black/40 w-full h-full z-10"></div>
+                    <label className="" htmlFor="file">
+                      <Edit
+                        size={20}
+                        className="absolute text-white z-15 right-4 top-5"
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                {/* Hidden file input */}
+                <Input
+                  ref={fileInputRef}
+                  id="file"
+                  name="file"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+
+                <InputFieldsError field="profilePhoto" state={state} />
+              </Field>
               {/* user name */}
               <Field>
                 <FieldLabel htmlFor="name">Name</FieldLabel>
@@ -301,52 +341,6 @@ const UpdateUserFormDialog = ({
                   placeholder="Type your Bio here."
                 />
                 <InputFieldsError field="bio" state={state} />
-              </Field>
-
-              {/* file */}
-              <Field>
-                <FieldLabel>Profile Photo</FieldLabel>
-
-                <div className="relative w-28 h-28">
-                  {/* Avatar */}
-                  <div className="relative w-28 h-28 rounded-full overflow-hidden border bg-gray-100">
-                    {previewSrc ? (
-                      <Image
-                        src={previewSrc}
-                        alt="Profile Photo"
-                        fill
-                        className="object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-gray-500 text-sm">
-                        No Photo
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Edit overlay */}
-                  <label
-                    htmlFor="file"
-                    className="absolute inset-0 flex items-center justify-center
-          rounded-full bg-black/40 text-white text-sm font-medium
-          opacity-0 hover:opacity-100 cursor-pointer transition"
-                  >
-                    Edit
-                  </label>
-                </div>
-
-                {/* Hidden file input */}
-                <Input
-                  ref={fileInputRef}
-                  id="file"
-                  name="file"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleFileChange}
-                />
-
-                <InputFieldsError field="profilePhoto" state={state} />
               </Field>
             </div>
           )}

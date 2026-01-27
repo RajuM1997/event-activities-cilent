@@ -27,18 +27,18 @@ const EventPage = async ({
             one place. Pick an event, join in, and connect with your community.
           </p>
         </div>
-        {data.length > 0 && (
-          <div className="pb-15">
-            <EventSearchOption />
-          </div>
-        )}
+        {/* {data.length > 0 && ( */}
+        <div className="py-15 ">
+          <EventSearchOption />
+        </div>
+        {/* )} */}
         <div className="grid gap-6 md:grid-cols-3">
-          {data.length > 0 &&
+          {data?.length > 0 &&
             data?.map((event: IEvent) => (
               <EventCard event={event} key={event.eventName} />
             ))}
         </div>
-        {data.length === 0 && (
+        {data?.length === 0 && (
           <p className="text-xl text-center p-5 h-full flex justify-center items-center">
             No events found. Check back soon for upcoming events!
           </p>
