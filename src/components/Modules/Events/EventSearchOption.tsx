@@ -9,14 +9,16 @@ import { Label } from "@/components/ui/label";
 const EventSearchOption = () => {
   return (
     <div
-      className="space-y-5 w-fit mx-auto md:h-50 lg:h-40 bg-primary/10 flex justify-center items-center px-5 lg:px-20 rounded-lg h-80 py-5 "
-      style={{ boxShadow: "0 4px 4px rgba(0,0,0,.25)" }}
+      className="space-y-5 w-fit mx-auto lg:h-80 flex justify-center items-center px-5 rounded-lg h-full py-5 backdrop-blur-md border border-white/20"
+      style={{
+        background:
+          "linear-gradient(135deg, rgba(255,255,255,0.25), rgba(34,197,94,0.05))",
+        boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
+      }}
     >
-      {/* Row 1: Refresh Button */}
-
       {/* Row 2: Filter Controls */}
       <div className="flex items-center gap-3 flex-wrap">
-        <div>
+        <div className="w-full">
           <Label className="pb-2">Location</Label>
           <SearchFilter
             paramName="location"
@@ -25,7 +27,7 @@ const EventSearchOption = () => {
         </div>
 
         {/* Category Filter */}
-        <div>
+        <div className="w-full">
           <Label className="pb-2">Category</Label>
           <SelectFilter
             paramName="category"
@@ -42,7 +44,9 @@ const EventSearchOption = () => {
         </div>
 
         {/* Date filter */}
-        <DateSelectFilter paramName="category" />
+        <div className="w-full">
+          <DateSelectFilter paramName="date" />
+        </div>
 
         {/* Clear All Filters */}
         <div>

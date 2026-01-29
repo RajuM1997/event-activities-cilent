@@ -76,6 +76,8 @@ export const createEvent = async (
 export const getEvents = async (queryString?: string) => {
   try {
     const searchParams = new URLSearchParams(queryString);
+    console.log(searchParams);
+
     const page = searchParams.get("page") || "1";
     const searchTerm = searchParams.get("searchTerm") || "all";
 

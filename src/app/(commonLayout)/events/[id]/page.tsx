@@ -1,9 +1,11 @@
 import Image from "next/image";
 import { getEventById } from "@/services/event/event.service";
 import JoinEventButton from "@/components/Modules/Events/JoinEventButton";
+import { getUserInfo } from "@/services/auth/getUserInfo";
 
 const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
   const { id } = await params;
+  const userInfo = await getUserInfo();
   const { data: event } = await getEventById(id);
 
   const eventDate = new Date(event.date).toLocaleDateString("en-US", {
@@ -92,7 +94,7 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
             </div>
 
             {/* Join Button */}
-            <JoinEventButton eventId={event.id} />
+            <JoinEventButton eventId={event.id} userInfo={userInfo} />
           </div>
         </div>
       </div>

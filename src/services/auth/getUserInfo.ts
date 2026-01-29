@@ -39,10 +39,9 @@ export const getUserInfo = async (): Promise<IUser | any> => {
 
     userInfo = {
       name:
-        result.data.admin?.name ||
-        result.data.doctor?.name ||
-        result.data.patient?.name ||
-        result.data.name ||
+        result.data?.admin?.name ||
+        result.data?.host?.name ||
+        result.data?.userProfile?.name ||
         "Unknown User",
       ...result.data,
     };

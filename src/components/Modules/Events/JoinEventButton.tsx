@@ -1,15 +1,31 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
+import { getUserInfo } from "@/services/auth/getUserInfo";
 import { initiatePayment } from "@/services/booking/booking.service";
+import { IUser } from "@/types/user.interface";
 import { useState } from "react";
 import { toast } from "sonner";
 
-const JoinEventButton = ({ eventId }: { eventId: string }) => {
-  const [processingPaymentId, setProcessingPaymentId] = useState<string | null>(
-    null,
-  );
+const JoinEventButton = ({
+  eventId,
+  userInfo,
+}: {
+  eventId: string;
+  userInfo: IUser;
+}) => {
+  const [_processingPaymentId, setProcessingPaymentId] = useState<
+    string | null
+  >(null);
 
   const handleEventJoin = async () => {
+    if (userInfo.role === "ADMIN" || userInfo.role === "HOST") {
+      toast.warning(
+        `You are ${userInfo.role.toLocaleLowerCase()} you can not book this event`,
+      );
+      console.log(userInfo);
+      return;
+    }
     setProcessingPaymentId(eventId);
     try {
       const result = await initiatePayment(eventId);
@@ -31,8 +47,6 @@ const JoinEventButton = ({ eventId }: { eventId: string }) => {
       console.error(error);
     }
   };
-
-  console.log(processingPaymentId);
 
   return (
     <button

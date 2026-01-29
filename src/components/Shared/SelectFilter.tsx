@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Field } from "../ui/field";
 
 interface SelectFilterProps {
   paramName: string; // ?gender=
@@ -44,23 +45,25 @@ const SelectFilter = ({
     });
   };
   return (
-    <Select
-      value={currentValue}
-      onValueChange={handleChange}
-      disabled={isPending}
-    >
-      <SelectTrigger>
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value={defaultValue}>{defaultValue}</SelectItem>
-        {options.map((option) => (
-          <SelectItem key={option.value} value={option.value}>
-            {option.label}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <Field>
+      <Select
+        value={currentValue}
+        onValueChange={handleChange}
+        disabled={isPending}
+      >
+        <SelectTrigger>
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value={defaultValue}>{defaultValue}</SelectItem>
+          {options.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </Field>
   );
 };
 

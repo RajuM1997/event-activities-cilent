@@ -5,14 +5,17 @@ import HeroSection from "@/components/Home/HeroSection";
 import TestimonialSection from "@/components/Home/TestimonialSection";
 import WhyChooseUs from "@/components/Home/WhyChooseUsSection";
 import { getUserInfo } from "@/services/auth/getUserInfo";
+import { getEvents } from "@/services/event/event.service";
 
 export default async function Home() {
   const userInfo = await getUserInfo();
+  const limit = "limit=3";
+  const { data } = await getEvents(limit);
 
   return (
     <div>
       <HeroSection user={userInfo} />
-      <EventSection />
+      <EventSection events={data} />
       <CategoriesSection />
       <AboutSection />
       <WhyChooseUs />

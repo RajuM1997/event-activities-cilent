@@ -3,48 +3,43 @@
 import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
-import { ChevronDownIcon } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Field, FieldLabel } from "../ui/field";
 
 interface DateTimeFilterProps {
-  dateParam?: string; // ?date=
-  timeParam?: string; // ?time=
   paramName?: string;
 }
 
-const DateTimeFilter = ({
-  dateParam = "date",
-  timeParam = "time",
-}: DateTimeFilterProps) => {
+const getNowLocal = () => {
+  const now = new Date();
+  const pad = (n: number) => String(n).padStart(2, "0");
+
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(
+    now.getDate(),
+  )}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+};
+
+const DateTimeFilter = ({ paramName = "date" }: DateTimeFilterProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
-  const [open, setOpen] = React.useState(false);
+  const urlValue = searchParams.get(paramName);
+  const [value, setValue] = React.useState<string>(urlValue ?? getNowLocal());
 
-  // get values from URL
-  const dateValue = searchParams.get(dateParam);
-  const timeValue = searchParams.get(timeParam);
+  React.useEffect(() => {
+    if (urlValue) {
+      setValue(urlValue);
+    }
+  }, [urlValue]);
 
-  const selectedDate = dateValue ? new Date(dateValue) : undefined;
-
-  const updateParams = (key: string, value?: string) => {
+  const updateParams = (value?: string) => {
     const params = new URLSearchParams(searchParams.toString());
 
     if (!value) {
-      params.delete(key);
+      params.delete(paramName);
     } else {
-      params.set(key, value);
+      params.set(paramName, value);
     }
 
     startTransition(() => {
@@ -52,15 +47,24 @@ const DateTimeFilter = ({
     });
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setValue(newValue);
+    updateParams(newValue);
+  };
+
   return (
-    <div className="flex gap-4">
-      {/* Date Picker */}
-      <div className="flex flex-col gap-2">
-        <Field>
-          <FieldLabel htmlFor="date">Date</FieldLabel>
-          <Input id="date" name="date" type="datetime-local" />
-        </Field>
-      </div>
+    <div className="flex flex-col gap-2 w-full">
+      <Field>
+        <FieldLabel htmlFor="datetime">Date & Time</FieldLabel>
+        <Input
+          id="datetime"
+          type="datetime-local"
+          value={value}
+          onChange={handleChange}
+          disabled={isPending}
+        />
+      </Field>
     </div>
   );
 };

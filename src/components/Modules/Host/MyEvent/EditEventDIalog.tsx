@@ -20,6 +20,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { createEvent, updateEvent } from "@/services/event/event.service";
 import { IEvent } from "@/types/event.interface";
+import { Edit } from "lucide-react";
 import Image from "next/image";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -85,7 +86,18 @@ const UpdateEventFormDialog = ({
       }
     }
   }, [state, onSuccess, onClose, selectedFile]);
-  console.log(event?.date);
+
+  const previewSrc: string | undefined = selectedFile
+    ? URL.createObjectURL(selectedFile)
+    : event?.image;
+
+  useEffect(() => {
+    return () => {
+      if (selectedFile) {
+        URL.revokeObjectURL(previewSrc!);
+      }
+    };
+  }, [selectedFile, previewSrc]);
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -100,6 +112,47 @@ const UpdateEventFormDialog = ({
           className="flex flex-col flex-1 min-h-0"
         >
           <div className="flex-1 overflow-y-auto px-6 space-y-4 pb-4">
+            {/* file */}
+            <Field className="mx-auto">
+              <div className="relative w-28 h-28">
+                {/* Avatar */}
+                <div className="relative w-28 h-28 rounded-full overflow-hidden border bg-gray-100 mx-auto">
+                  {previewSrc ? (
+                    <Image
+                      src={previewSrc}
+                      alt="Profile Photo"
+                      fill
+                      className="object-cover mx-auto"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center text-gray-500 text-sm">
+                      No Photo
+                    </div>
+                  )}
+                  <div className="absolute top-0 left-0 bg-black/40 w-full h-full z-10"></div>
+                  <label className="" htmlFor="file">
+                    <Edit
+                      size={20}
+                      className="absolute text-white z-15 right-4 top-5"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              {/* Hidden file input */}
+              <Input
+                ref={fileInputRef}
+                id="file"
+                name="file"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleFileChange}
+              />
+
+              <InputFieldsError field="profilePhoto" state={state} />
+            </Field>
+
             {/* event name */}
             <Field>
               <FieldLabel htmlFor="eventName">Event Name</FieldLabel>
@@ -120,14 +173,9 @@ const UpdateEventFormDialog = ({
               <Input
                 id="date"
                 name="date"
-                type="date"
-                defaultValue={
-                  event?.date
-                    ? new Date(event.date).toISOString().split("T")[0]
-                    : new Date().toISOString().split("T")[0]
-                }
+                type="datetime-local"
+                defaultValue={event?.date || ""}
               />
-
               <InputFieldsError field="date" state={state} />
             </Field>
 
@@ -221,38 +269,6 @@ const UpdateEventFormDialog = ({
                 defaultValue={event?.description || ""}
               />
               <InputFieldsError field="description" state={state} />
-            </Field>
-
-            {/* file */}
-            <Field>
-              <FieldLabel htmlFor="file">Cover Photo</FieldLabel>
-              {selectedFile && (
-                <Image
-                  //get from state if available
-                  src={
-                    typeof selectedFile === "string"
-                      ? selectedFile
-                      : URL.createObjectURL(selectedFile)
-                  }
-                  alt="Profile Photo Preview"
-                  width={50}
-                  height={50}
-                  className="mb-2 rounded-full"
-                />
-              )}
-
-              <Input
-                ref={fileInputRef}
-                id="file"
-                name="file"
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Upload a profile photo for the doctor
-              </p>
-              <InputFieldsError state={state} field="profilePhoto" />
             </Field>
           </div>
 

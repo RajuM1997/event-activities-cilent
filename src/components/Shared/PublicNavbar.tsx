@@ -10,8 +10,8 @@ const PublicNavbar = async () => {
   const navItems = [
     { name: "Home", href: "/" },
     { name: "Explore Events", href: "/events" },
-    { name: "Become a Host", href: "/become-a-host", role: "PUBLIC" },
-    { name: "My Join Events", href: "/events/my-events", role: "PUBLIC" },
+    { name: "Become a Host", href: "/become-a-host", role: "USER" },
+    { name: "My Join Events", href: "/events/my-events", role: "USER" },
     { name: "My Events", href: "/host/my-events", role: "HOST" },
     { name: "Create Event", href: "/host/create-event", role: "HOST" },
     { name: "Dashboard", href: "/admin/dashboard", role: "ADMIN" },
@@ -19,6 +19,7 @@ const PublicNavbar = async () => {
   ];
   const accessToken = await getCookie("accessToken");
   const userInfo = await getUserInfo();
+  console.log({ userInfo });
 
   return (
     <header className="sticky to-0 z-50 border-b w-full bg-background/95 px-4 backdrop-blur dark:bg-background/95">

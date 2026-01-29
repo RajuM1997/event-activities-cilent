@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import EventCard from "../Modules/Events/EventCard";
-import { events } from "@/data/homePageData";
+import { IEvent } from "@/types/event.interface";
 
-export default function EventSection() {
+export default function EventSection({ events }: { events: IEvent[] }) {
   return (
-    <section className="py-16">
+    <section className="py-16 bg-linear-to-b from-green-50/50 to-white/30">
       <div className="container mx-auto px-4">
         <div className="mb-12 flex items-center justify-between">
           <div>
@@ -22,7 +22,7 @@ export default function EventSection() {
 
         <div className="grid gap-6 md:grid-cols-3">
           {events.map((event) => (
-            <EventCard event={event} key={event.title} />
+            <EventCard event={event} key={event.id} />
           ))}
         </div>
       </div>
