@@ -4,6 +4,18 @@ import Pagination from "@/components/Shared/Pagination";
 import { queryStringFormatter } from "@/lib/formatters";
 import { getEvents } from "@/services/event/event.service";
 import { IEvent } from "@/types/event.interface";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "All Events",
+  description:
+    "Discover all upcoming events on JoinUp. Browse events by date, location, and interests.",
+  openGraph: {
+    title: "All Events | JoinUp",
+    description:
+      "Explore all upcoming events and activities happening around you on JoinUp.",
+  },
+};
 
 const EventPage = async ({
   searchParams,
@@ -28,19 +40,19 @@ const EventPage = async ({
           </p>
         </div>
         <div className="grid grid-cols-12 gap-6 pt-10">
-          {data.length > 0 && (
-            <div className="col-span-12 lg:col-span-3">
-              <EventSearchOption />
-            </div>
-          )}
-          <div className="col-span-12 lg:col-span-9 grid gap-6 md:grid-cols-3">
-            {data?.length > 0 &&
-              data?.map((event: IEvent) => (
+          <div className="col-span-12 lg:col-span-3">
+            <EventSearchOption />
+          </div>
+
+          {data?.length > 0 && (
+            <div className="col-span-12 lg:col-span-9 grid gap-6 md:grid-cols-3">
+              {data?.map((event: IEvent) => (
                 <EventCard event={event} key={event.eventName} />
               ))}
-          </div>
+            </div>
+          )}
           {data?.length === 0 && (
-            <p className="text-xl text-center p-5 h-full flex justify-center items-center">
+            <p className="text-xl text-center col-span-9 p-5 h-full flex justify-center items-center">
               No events found. Check back soon for upcoming events!
             </p>
           )}

@@ -2,6 +2,17 @@ import ManageUserTable from "@/components/Admin/ManageUser/ManageUserTable";
 import Pagination from "@/components/Shared/Pagination";
 import { queryStringFormatter } from "@/lib/formatters";
 import { getAllUsers } from "@/services/admin/userManagement";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Manage Users",
+  description:
+    "Manage user accounts, monitor activity, and control access on JoinUp.",
+  openGraph: {
+    title: "Manage Users | JoinUp",
+    description: "Admin dashboard for managing all user accounts on JoinUp.",
+  },
+};
 
 const ManageUserPage = async ({
   searchParams,

@@ -21,7 +21,7 @@ export default function EventSection({ events }: { events: IEvent[] }) {
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
-          {events.map((event) => (
+          {events?.map((event) => (
             <EventCard event={event} key={event.id} />
           ))}
         </div>

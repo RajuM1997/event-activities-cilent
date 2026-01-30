@@ -1,7 +1,32 @@
 import Image from "next/image";
-import { getEventById } from "@/services/event/event.service";
+import { getEventById, getEvents } from "@/services/event/event.service";
 import JoinEventButton from "@/components/Modules/Events/JoinEventButton";
 import { getUserInfo } from "@/services/auth/getUserInfo";
+import { IEvent } from "@/types/event.interface";
+
+export const generateStaticParams = async () => {
+  const queryParams = "limit=5&page=1";
+  const res = await getEvents(queryParams);
+  const events = res?.data ?? [];
+
+  return events?.map((event: IEvent) => ({
+    id: String(event.id),
+  }));
+};
+
+export const generateMetadata = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
+  const { id } = await params;
+
+  const { data } = await getEventById(id);
+  return {
+    title: data?.eventName,
+    description: data?.description,
+  };
+};
 
 const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
   const { id } = await params;

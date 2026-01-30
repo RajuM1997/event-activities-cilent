@@ -2,6 +2,17 @@ import HostMyEventsTable from "@/components/Modules/Host/MyEvent/HostMyEventTabl
 import Pagination from "@/components/Shared/Pagination";
 import { queryStringFormatter } from "@/lib/formatters";
 import { getHostEvents } from "@/services/event/event.service";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "My Events",
+  description: "Manage your joined and hosted events in one place on JoinUp.",
+  openGraph: {
+    title: "My Events | JoinUp",
+    description:
+      "View and manage your joined and hosted events easily with JoinUp.",
+  },
+};
 
 const CreateEventPage = async ({
   searchParams,

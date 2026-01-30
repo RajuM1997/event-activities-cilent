@@ -6,6 +6,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Create Event",
+  description:
+    "Create and host your own event. Share experiences and bring people together with JoinUp.",
+  openGraph: {
+    title: "Create Event | JoinUp",
+    description: "Host events and connect with your community using JoinUp.",
+  },
+};
 
 const CreateEventPage = () => {
   return (

@@ -2,6 +2,17 @@ import ManageHostTable from "@/components/Admin/ManageHost/ManageHostTable";
 import Pagination from "@/components/Shared/Pagination";
 import { queryStringFormatter } from "@/lib/formatters";
 import { getHosts } from "@/services/admin/hostManagement";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Manage Hosts",
+  description: "View, approve, reject, and manage event hosts on JoinUp.",
+  openGraph: {
+    title: "Manage Hosts | JoinUp",
+    description:
+      "Admin panel for managing host accounts and host requests on JoinUp.",
+  },
+};
 
 const ManageHostPage = async ({
   searchParams,

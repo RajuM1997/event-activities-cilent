@@ -93,6 +93,8 @@ export const getEvents = async (queryString?: string) => {
         },
       },
     );
+    console.log(res);
+
     const result = await res.json();
     return result;
   } catch (error: any) {
