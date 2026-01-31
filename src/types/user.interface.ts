@@ -28,6 +28,7 @@ export enum UserInterests {
   Fitness = "Fitness",
 }
 export interface IUserProfile {
+  id: string;
   name: string;
   interests: UserInterests;
   email: string;

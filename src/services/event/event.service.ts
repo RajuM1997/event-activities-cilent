@@ -1,10 +1,14 @@
+"use server";
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { serverFetch } from "@/lib/server-fetch";
 import { zodValidator } from "@/lib/zodValidator";
+import { IReviewFormData } from "@/types/review.interface";
 import {
   createEventValidationZodSchema,
   updateEventValidationZodSchema,
 } from "@/zod/event.validation";
+import { revalidateTag } from "next/cache";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const createEvent = async (
@@ -76,7 +80,6 @@ export const createEvent = async (
 export const getEvents = async (queryString?: string) => {
   try {
     const searchParams = new URLSearchParams(queryString);
-    console.log(searchParams);
 
     const page = searchParams.get("page") || "1";
     const searchTerm = searchParams.get("searchTerm") || "all";
@@ -93,7 +96,6 @@ export const getEvents = async (queryString?: string) => {
         },
       },
     );
-    console.log(res);
 
     const result = await res.json();
     return result;
@@ -116,6 +118,28 @@ export const getEvents = async (queryString?: string) => {
 export const getHostEvents = async (_queryString?: string) => {
   try {
     const res = await serverFetch.get("/event/my-events?isDeleted=false");
+    const result = await res.json();
+
+    return result;
+  } catch (error: any) {
+    if (error?.digest?.startsWith("NEXT_REDIRECT")) {
+      throw error;
+    }
+    console.log(error);
+    return {
+      success: false,
+      message: `${
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Event get Failed. Please try again."
+      }`,
+    };
+  }
+};
+
+export const getUserJoiningEvents = async () => {
+  try {
+    const res = await serverFetch.get("/event/my-joining-events");
     const result = await res.json();
 
     return result;
@@ -242,6 +266,35 @@ export const softDeleteEvent = async (id: string) => {
           ? error.message
           : "Event Updated Failed. Please try again."
       }`,
+    };
+  }
+};
+
+export const createReview = async (data: IReviewFormData) => {
+  try {
+    const response = await serverFetch.post("/review", {
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      revalidateTag("reviews-list", { expire: 0 });
+      revalidateTag("event-list", { expire: 0 });
+    }
+
+    return result;
+  } catch (error: any) {
+    console.error("Error creating review:", error);
+    return {
+      success: false,
+      message:
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Failed to create review",
     };
   }
 };

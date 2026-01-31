@@ -48,6 +48,10 @@ export default function UserEventsTable({
     }
   };
 
+  const viewDetails = async (event: IBooking) => {
+    router.push(`/events/${event?.eventId}`);
+  };
+
   return (
     <>
       <ManagementTable
@@ -56,13 +60,14 @@ export default function UserEventsTable({
         onCancel={bookingCancel}
         getRowKey={(event) => event?.id as string}
         emptyMessage="No Events found"
+        onView={viewDetails}
       />
       <DeleteConfirmationDialog
         open={!!bookingEvent}
         onOpenChange={(open) => !open && setBookingEvent(null)}
         onConfirm={confirmDelete}
         title="Cancel Event Booking"
-        description={`Are you sure you want to cancel booking ${bookingEvent?.eventName}? This action cannot be undone.`}
+        description={`Are you sure you want to cancel booking ${bookingEvent?.event?.eventName}? This action cannot be undone.`}
         isDeleting={isCanceled}
       />
     </>

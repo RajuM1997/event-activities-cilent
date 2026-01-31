@@ -10,6 +10,7 @@ export interface IEvent {
   joiningFee: string;
   status: EventStatus;
   image: string;
+  joinCount: number;
 }
 export enum EventStatus {
   OPEN = "OPEN",
@@ -27,11 +28,16 @@ export interface IBooking {
   transactionId: string;
   updatedAt: string;
   amount: number;
-  eventName?: string;
-  date?: string;
+  event: IBookingEvent;
+  userId: string;
 }
 
 export enum BookingStatus {
   BOOKED = "BOOKED",
   CANCELLED = "CANCELLED",
+}
+export interface IBookingEvent {
+  eventName: string;
+  date: string;
+  category: string;
 }

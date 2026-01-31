@@ -1,5 +1,5 @@
 import UserEventsTable from "@/components/Modules/Events/UserJoinEvent/UserJoinEventTable";
-import { getUserInfo } from "@/services/auth/getUserInfo";
+import { getUserJoiningEvents } from "@/services/event/event.service";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,12 +13,12 @@ export const metadata: Metadata = {
 };
 
 const MyJoinEventPage = async () => {
-  const userInfo = await getUserInfo();
+  const { data } = await getUserJoiningEvents();
 
   return (
     <section className="py-16">
       <div className="container mx-auto px-4 max-w-6xl">
-        <UserEventsTable event={userInfo.booking || []} />
+        <UserEventsTable event={data?.booking || []} />
       </div>
     </section>
   );
