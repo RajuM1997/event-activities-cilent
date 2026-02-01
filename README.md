@@ -1,36 +1,140 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# JoinUp – Client (Next.js)
 
-## Getting Started
+## 🌐 Live URL
 
-First, run the development server:
+[https://joinup.vercel.app](https://joinup.vercel.app)
+
+## 📌 Project Overview
+
+**JoinUp** is an event management and booking platform where users can explore events, join events, leave reviews, and hosts can create and manage events. This repository contains the **client-side application** built with **Next.js (App Router)**.
+
+---
+
+## ✨ Features
+
+### 👤 User Features
+
+- Browse all events with filters & search
+- View event details with host info & reviews
+- Join/book events
+- Add reviews after booking
+- Authentication (Email/Password & Google)
+
+### 🎤 Host Features
+
+- Create and manage events
+- View joined users
+- Manage event status
+
+### 🛠️ Admin Features
+
+- Dashboard with analytics
+- Manage users, hosts, and events
+
+### 🎨 UI/UX
+
+- Responsive design
+- Skeleton loaders
+- Glassmorphism & modern UI
+- SEO with dynamic metadata
+- Custom 404 & error pages
+
+---
+
+## 🧰 Technology Stack
+
+### Frontend
+
+- **Next.js 16 (App Router)**
+- **TypeScript**
+- **Tailwind CSS**
+- **shadcn/ui**
+- **React Hook Form**
+- **Zod**
+- **Swiper.js**
+
+### Auth & State
+
+- JWT-based authentication
+- Server & Client Components
+
+---
+
+## ⚙️ Setup & Installation
+
+### 1️⃣ Clone Repository
+
+```bash
+git clone https://github.com/RajuM1997/event-activities-cilent.git
+cd joinup-client
+```
+
+### 2️⃣ Install Dependencies
+
+```bash
+npm install
+```
+
+### 3️⃣ Environment Variables
+
+Create a `.env.local` file:
+
+```env
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8800/api/v1
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id
+```
+
+### 4️⃣ Run Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+App will run at: `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧪 Build for Production
 
-## Learn More
+```bash
+npm run build
+npm start
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📂 Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```txt
+src/
+ ├─ app/            # App router pages
+ ├─ components/     # Reusable UI components
+ ├─ services/       # API services
+ ├─ hooks/          # Custom hooks
+ ├─ types/          # TypeScript types
+ └─ lib/            # Utilities
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🔐 Authentication Flow
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Access token stored via HTTP-only cookies
+- Protected routes with middleware
+- Role-based access control
+
+---
+
+## 🚀 Deployment
+
+Deployed on **Vercel** with environment variables configured in dashboard.
+
+---
+
+## 📞 Support
+
+If you face any issues, feel free to open an issue or contact the maintainer.
+
+---
+
+© 2026 JoinUp. All rights reserved.
