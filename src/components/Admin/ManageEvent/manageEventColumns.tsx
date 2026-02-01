@@ -42,6 +42,7 @@ export const manageEventColumns: Column<IEvent>[] = [
         </div>
       </div>
     ),
+    sortKey: "event.date",
   },
   {
     header: "Date",
@@ -72,10 +73,9 @@ export const manageEventColumns: Column<IEvent>[] = [
     header: "Joining Fee",
     accessor: (event) => (
       <span className="text-sm p-2 font-semibold text-green-600">
-        ${event.joiningFee}
+        ৳{event.joiningFee}
       </span>
     ),
-    sortKey: "Join_Fee",
   },
   {
     header: "Min Participants",
@@ -84,7 +84,6 @@ export const manageEventColumns: Column<IEvent>[] = [
         {event.minParticipants}
       </span>
     ),
-    sortKey: "minParticipants",
   },
   {
     header: "Category",
@@ -102,15 +101,14 @@ export const manageEventColumns: Column<IEvent>[] = [
         {event.maxParticipants}
       </span>
     ),
-    sortKey: "maxParticipants",
   },
   {
     header: "Status",
-    accessor: () => {
-      const config = statusConfig[0];
+    accessor: (event) => {
+      const config = statusConfig[event.status];
       return (
         <Badge variant={config?.variant} className={config?.className}>
-          {config.label}
+          {config?.label}
         </Badge>
       );
     },

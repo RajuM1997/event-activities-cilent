@@ -3,6 +3,7 @@
 
 import { getUserInfo } from "@/services/auth/getUserInfo";
 import { initiatePayment } from "@/services/booking/booking.service";
+import { IEvent } from "@/types/event.interface";
 import { IUser } from "@/types/user.interface";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -10,9 +11,11 @@ import { toast } from "sonner";
 const JoinEventButton = ({
   eventId,
   userInfo,
+  event,
 }: {
   eventId: string;
   userInfo: IUser;
+  event: IEvent;
 }) => {
   const [_processingPaymentId, setProcessingPaymentId] = useState<
     string | null
@@ -23,9 +26,21 @@ const JoinEventButton = ({
       toast.warning(
         `You are ${userInfo.role.toLocaleLowerCase()} you can not book this event`,
       );
-      console.log(userInfo);
       return;
     }
+    if (event.status === "CANCELLED") {
+      toast.warning(
+        `You can't join this this event. This event already cancel`,
+      );
+      return;
+    }
+    if (event.status === "FULL") {
+      toast.warning(
+        `You can't join this this event this event participant already full`,
+      );
+      return;
+    }
+
     setProcessingPaymentId(eventId);
     try {
       const result = await initiatePayment(eventId);

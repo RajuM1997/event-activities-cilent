@@ -49,6 +49,7 @@ export async function proxy(request: NextRequest) {
   const routerOwner = getRouteOwner(pathname);
   const isAuth = isAuthRoute(pathname);
   // rule 1: user is logged in and trying to access auth route. Redirect to default dashboard
+
   if (accessToken && isAuth) {
     return NextResponse.redirect(
       new URL(getDefaultDashboardRoute(userRole as UserRole), request.url),

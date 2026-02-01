@@ -39,7 +39,6 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
     month: "long",
     day: "numeric",
   });
-  console.log(event);
 
   return (
     <section className="py-16">
@@ -122,7 +121,11 @@ const EventDetailsPage = async ({ params }: { params: { id: string } }) => {
 
             {/* Sticky Join Button */}
             <div className="sticky top-24">
-              <JoinEventButton eventId={event.id} userInfo={userInfo} />
+              <JoinEventButton
+                event={event}
+                eventId={event.id}
+                userInfo={userInfo}
+              />
             </div>
           </div>
         </div>

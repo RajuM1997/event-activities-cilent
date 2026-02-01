@@ -7,13 +7,14 @@ export const manageUserColumns: Column<IUser>[] = [
     accessor: (user) => (
       <div className="flex items-center gap-2">
         <div>
-          <p className="font-medium">{user.name || "N/A"}</p>
+          <p className="font-medium">{user.userProfile?.name || "N/A"}</p>
           {/* <p className="text-xs text-muted-foreground">
             {event.patient?.email || ""}
           </p> */}
         </div>
       </div>
     ),
+    sortKey: "name",
   },
   {
     header: "Email",
@@ -22,7 +23,7 @@ export const manageUserColumns: Column<IUser>[] = [
         {user.email}
       </span>
     ),
-    sortKey: "minParticipants",
+    sortKey: "email",
   },
   {
     header: "City",

@@ -1,14 +1,13 @@
 import { NavSection } from "@/types/dashboard.interface";
 import { getNavItemsByRole } from "@/lib/navItems.config";
 import DashboardSidebarContent from "./DashboardSidebarContent";
+import { getUserInfo } from "@/services/auth/getUserInfo";
 
 const DashboardSidebar = async () => {
-  const userInfo = {
-    name: "raju",
-    role: "ADMIN",
-  };
+  const userInfo = await getUserInfo();
+
   const navItems: NavSection[] = getNavItemsByRole();
-  const dashboardHome = "ADMIN";
+  const dashboardHome = "/admin/dashboard";
   return (
     <DashboardSidebarContent
       userInfo={userInfo}

@@ -42,6 +42,7 @@ export const hostMyEventColumns: Column<IEvent>[] = [
         </div>
       </div>
     ),
+    sortKey: "eventName",
   },
   {
     header: "Date",
@@ -66,22 +67,20 @@ export const hostMyEventColumns: Column<IEvent>[] = [
         </div>
       );
     },
+    sortKey: "date",
   },
   {
     header: "Joining Fee",
     accessor: (event) => (
       <span className="text-sm p-2 font-semibold text-green-600">
-        ${event.joiningFee}
+        ৳{event.joiningFee}
       </span>
     ),
-    sortKey: "Join_Fee",
   },
   {
     header: "Total Join",
     accessor: (event) => (
-      <span className="text-sm p-2 font-semibold text-green-600">
-        ${event.joinCount}
-      </span>
+      <span className="text-sm p-2 font-semibold ">{event.joinCount}</span>
     ),
   },
   {
@@ -91,7 +90,6 @@ export const hostMyEventColumns: Column<IEvent>[] = [
         {event.minParticipants}
       </span>
     ),
-    sortKey: "minParticipants",
   },
   {
     header: "Category",
@@ -109,7 +107,6 @@ export const hostMyEventColumns: Column<IEvent>[] = [
         {event.maxParticipants}
       </span>
     ),
-    sortKey: "maxParticipants",
   },
   {
     header: "Status",

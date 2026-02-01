@@ -14,6 +14,7 @@ export const manageHostColumns: Column<IUser>[] = [
         </div>
       </div>
     ),
+    sortKey: "name",
   },
   {
     header: "Email",
@@ -22,6 +23,7 @@ export const manageHostColumns: Column<IUser>[] = [
         {user.email}
       </span>
     ),
+    sortKey: "email",
   },
   {
     header: "Phone Number",
