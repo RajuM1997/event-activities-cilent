@@ -29,7 +29,7 @@ const EventCard = ({ event }: { event: IEvent }) => {
           alt={event.eventName}
           width={400}
           height={300}
-          className="h-full w-full object-cover"
+          className="h-75 w-full object-cover"
         />
 
         {/* Date Badge */}

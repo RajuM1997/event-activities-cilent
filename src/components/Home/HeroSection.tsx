@@ -53,7 +53,7 @@ export default function HeroSection({ user }: { user: IUser }) {
               </Link>
 
               {user.role === "HOST" && (
-                <Link href="/create-event">
+                <Link href="/host/create-event">
                   <Button
                     size="lg"
                     variant="outline"

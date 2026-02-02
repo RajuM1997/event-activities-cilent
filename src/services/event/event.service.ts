@@ -9,6 +9,7 @@ import {
   updateEventValidationZodSchema,
 } from "@/zod/event.validation";
 import { revalidateTag } from "next/cache";
+import { redirect } from "next/navigation";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const createEvent = async (
@@ -60,6 +61,10 @@ export const createEvent = async (
       body: newFormData,
     });
     const result = await res.json();
+    if (result.success) {
+      revalidateTag("event-list", { expire: 0 });
+      redirect("/host/my-events");
+    }
     return result;
   } catch (error: any) {
     if (error?.digest?.startsWith("NEXT_REDIRECT")) {

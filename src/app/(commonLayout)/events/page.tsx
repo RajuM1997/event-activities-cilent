@@ -25,6 +25,7 @@ const EventPage = async ({
   const searchParamsObj = await searchParams;
   const queryString = queryStringFormatter(searchParamsObj);
   const { data, meta } = await getEvents(queryString);
+  console.log(meta);
 
   return (
     <section className="py-16 ">
