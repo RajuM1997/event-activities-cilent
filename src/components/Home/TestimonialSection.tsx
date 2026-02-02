@@ -57,6 +57,7 @@ export default function TestimonialSection() {
             768: { slidesPerView: 2 },
             1024: { slidesPerView: 3 },
           }}
+          className="category-swiper"
         >
           {testimonials.map((item) => (
             <SwiperSlide key={item.name}>

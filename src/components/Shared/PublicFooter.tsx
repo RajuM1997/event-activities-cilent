@@ -5,7 +5,7 @@ export default function PublicFooter() {
   return (
     <footer className="border-t bg-background">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid gap-8 md:grid-cols-4">
+        <div className="grid gap-8 md:grid-cols-3">
           {/* Brand */}
           <div>
             <h3 className="text-xl font-bold">JoinUp</h3>
@@ -37,47 +37,20 @@ export default function PublicFooter() {
             </ul>
           </div>
 
-          {/* Support */}
-          <div>
-            <h4 className="mb-3 font-semibold">Support</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/contact" className="hover:text-primary">
-                  Contact Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/faq" className="hover:text-primary">
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy" className="hover:text-primary">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms" className="hover:text-primary">
-                  Terms & Conditions
-                </Link>
-              </li>
-            </ul>
-          </div>
-
           {/* Social */}
           <div>
             <h4 className="mb-3 font-semibold">Follow Us</h4>
             <div className="flex gap-4">
-              <Link href="#" aria-label="Facebook">
+              <Link href="https://www.facebook.com" aria-label="Facebook">
                 <Facebook className="h-5 w-5 hover:text-primary" />
               </Link>
-              <Link href="#" aria-label="Twitter">
+              <Link href="https://x.com/?lang=en" aria-label="Twitter">
                 <Twitter className="h-5 w-5 hover:text-primary" />
               </Link>
-              <Link href="#" aria-label="Instagram">
+              <Link href="https://www.instagram.com/" aria-label="Instagram">
                 <Instagram className="h-5 w-5 hover:text-primary" />
               </Link>
-              <Link href="#" aria-label="LinkedIn">
+              <Link href="https://www.linkedin.com/login" aria-label="LinkedIn">
                 <Linkedin className="h-5 w-5 hover:text-primary" />
               </Link>
             </div>

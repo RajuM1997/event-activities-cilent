@@ -39,6 +39,11 @@ const EventSearchOption = () => {
               { label: "Movie Night", value: "Movie_Night" },
               { label: "Stand Up Comedy", value: "Stand_up_Comedy" },
               { label: "Theater", value: "Theater" },
+              { label: "Hackathon", value: "Hackathon" },
+              { label: "Dev Meetup", value: "Dev_Meetup" },
+              { label: "Tech Talk", value: "Tech_Talk" },
+              { label: "Coding Workshop", value: "Coding_Workshop" },
+              { label: "Networking Event", value: "Networking_Event" },
             ]}
           />
         </div>

@@ -44,7 +44,7 @@ const ManageEventDialog = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [state, formAction, isPending] = useActionState(
     isEdit ? updateEvent.bind(null, event.id!) : createEvent,
-    null
+    null,
   );
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -119,8 +119,12 @@ const ManageEventDialog = ({
               <Input
                 id="date"
                 name="date"
-                type="date"
-                defaultValue={event?.date || ""}
+                type="datetime-local"
+                defaultValue={
+                  event?.date
+                    ? new Date(event.date).toISOString().slice(0, 16)
+                    : ""
+                }
               />
               <InputFieldsError field="date" state={state} />
             </Field>
@@ -199,6 +203,15 @@ const ManageEventDialog = ({
                       Stand up Comedy
                     </SelectItem>
                     <SelectItem value="Theater">Theater</SelectItem>
+                    <SelectItem value="Hackathon">Hackathon</SelectItem>
+                    <SelectItem value="Dev_Meetup">Dev Meetup</SelectItem>
+                    <SelectItem value="Tech_Talk">Tech Talk</SelectItem>
+                    <SelectItem value="Coding_Workshop">
+                      Coding Workshop
+                    </SelectItem>
+                    <SelectItem value="Networking_Event">
+                      Networking Event
+                    </SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -263,8 +276,8 @@ const ManageEventDialog = ({
               {isPending
                 ? "Saving..."
                 : isEdit
-                ? "Update Doctor"
-                : "Create Doctor"}
+                  ? "Update Doctor"
+                  : "Create Doctor"}
             </Button>
           </div>
         </form>

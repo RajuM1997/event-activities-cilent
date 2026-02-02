@@ -174,7 +174,11 @@ const UpdateEventFormDialog = ({
                 id="date"
                 name="date"
                 type="datetime-local"
-                defaultValue={event?.date || ""}
+                defaultValue={
+                  event?.date
+                    ? new Date(event.date).toISOString().slice(0, 16)
+                    : ""
+                }
               />
               <InputFieldsError field="date" state={state} />
             </Field>
@@ -235,7 +239,6 @@ const UpdateEventFormDialog = ({
               />
               <InputFieldsError field="joiningFee" state={state} />
             </Field>
-
             {/* category */}
             <Field>
               <FieldLabel htmlFor="category">Category</FieldLabel>
@@ -253,6 +256,15 @@ const UpdateEventFormDialog = ({
                       Stand up Comedy
                     </SelectItem>
                     <SelectItem value="Theater">Theater</SelectItem>
+                    <SelectItem value="Hackathon">Hackathon</SelectItem>
+                    <SelectItem value="Dev_Meetup">Dev Meetup</SelectItem>
+                    <SelectItem value="Tech_Talk">Tech Talk</SelectItem>
+                    <SelectItem value="Coding_Workshop">
+                      Coding Workshop
+                    </SelectItem>
+                    <SelectItem value="Networking_Event">
+                      Networking Event
+                    </SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
