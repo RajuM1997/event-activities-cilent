@@ -16,7 +16,6 @@ const ProfileMain = ({ userProfile }: { userProfile: IUser }) => {
       router.refresh();
     });
   };
-  console.log({ editedUser });
 
   return (
     <section>

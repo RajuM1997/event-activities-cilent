@@ -6,7 +6,9 @@ import { IEvent } from "@/types/event.interface";
 import EventReviews from "@/components/Modules/Events/EventReview";
 
 export const generateStaticParams = async () => {
-  const res = await fetch("http://localhost:8800/api/v1/event?limit=5&page=1");
+  const res = await fetch(
+    "https://event-activities-server.onrender.com/api/v1/event?limit=5&page=1",
+  );
   const result = await res.json();
   const events = result?.data ?? [];
 

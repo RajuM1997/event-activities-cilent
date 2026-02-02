@@ -35,7 +35,7 @@ export function DashboardSkeleton() {
             <Skeleton className="h-3 w-48 mt-2" />
           </CardHeader>
           <CardContent className="pl-2">
-            <Skeleton className="h-[350px] w-full" />
+            <Skeleton className="h-87.5 w-full" />
           </CardContent>
         </Card>
         <Card className="col-span-3 border-muted/30">
@@ -44,7 +44,7 @@ export function DashboardSkeleton() {
             <Skeleton className="h-3 w-48 mt-2" />
           </CardHeader>
           <CardContent>
-            <Skeleton className="h-[300px] w-full" />
+            <Skeleton className="h-75 w-full" />
           </CardContent>
         </Card>
       </div>

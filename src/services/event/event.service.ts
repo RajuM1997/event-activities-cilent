@@ -115,9 +115,19 @@ export const getEvents = async (queryString?: string) => {
   }
 };
 
-export const getHostEvents = async (_queryString?: string) => {
+export const getHostEvents = async (queryString?: string) => {
   try {
-    const res = await serverFetch.get("/event/my-events?isDeleted=false");
+    const searchParams = new URLSearchParams(queryString);
+
+    const page = searchParams.get("page") || "1";
+    const res = await serverFetch.get(
+      `/event/my-events?isDeleted=false&${queryString ? `?${queryString}` : ""}`,
+      {
+        next: {
+          tags: ["host-event-list"],
+        },
+      },
+    );
     const result = await res.json();
 
     return result;
@@ -139,7 +149,11 @@ export const getHostEvents = async (_queryString?: string) => {
 
 export const getUserJoiningEvents = async () => {
   try {
-    const res = await serverFetch.get("/event/my-joining-events");
+    const res = await serverFetch.get("/event/my-joining-events", {
+      next: {
+        tags: ["user-event-list"],
+      },
+    });
     const result = await res.json();
 
     return result;
@@ -229,6 +243,11 @@ export const updateEvent = async (
       body: newFormData,
     });
     const result = await res.json();
+
+    if (result.success) {
+      revalidateTag("event-list", { expire: 0 });
+      revalidateTag("host-event-list", { expire: 0 });
+    }
     return result;
   } catch (error: any) {
     if (error?.digest?.startsWith("NEXT_REDIRECT")) {
@@ -253,6 +272,10 @@ export const softDeleteEvent = async (id: string) => {
       body: null,
     });
     const result = await res.json();
+
+    if (result.success) {
+      revalidateTag("event-list", { expire: 0 });
+    }
     return result;
   } catch (error: any) {
     if (error?.digest?.startsWith("NEXT_REDIRECT")) {
@@ -301,6 +324,7 @@ export const createReview = async (data: IReviewFormData) => {
 
 export const deleteEvent = async (id: string) => {
   try {
+    revalidateTag("event-list", { expire: 0 });
     await serverFetch.delete(`/event/${id}`);
     return {
       success: true,

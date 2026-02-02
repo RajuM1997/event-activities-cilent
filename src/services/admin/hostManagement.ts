@@ -1,10 +1,26 @@
+"use server";
+
 import { serverFetch } from "@/lib/server-fetch";
+import { revalidateTag } from "next/cache";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export const getHosts = async (_queryString?: string) => {
+export const getHosts = async (queryString?: string) => {
   try {
-    const res = await serverFetch.get("/user?role=HOST");
-    return res.json();
+    const searchParams = new URLSearchParams(queryString);
+    const page = searchParams.get("page") || "1";
+
+    const res = await serverFetch.get(
+      `/user?role=HOST&${queryString ? `?${queryString}` : ""}`,
+      {
+        next: {
+          tags: ["host-list", `user-page-${page}`],
+        },
+      },
+    );
+
+    const result = await res.json();
+
+    return result;
   } catch (error: any) {
     if (error?.digest?.startsWith("NEXT_REDIRECT")) {
       throw error;
@@ -33,8 +49,11 @@ export const updateHostStatue = async (
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),
     });
-
-    return res.json();
+    const result = await res.json();
+    if (result.success) {
+      revalidateTag("host-list", { expire: 0 });
+    }
+    return result;
   } catch (error: any) {
     if (error?.digest?.startsWith("NEXT_REDIRECT")) {
       throw error;

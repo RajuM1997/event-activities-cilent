@@ -38,8 +38,6 @@ const EventReviews = ({
     }
   }, [booking, userId]);
 
-  console.log({ isAbleToGiveReview });
-
   return (
     <section className="space-y-6">
       {/* Header */}

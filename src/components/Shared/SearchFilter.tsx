@@ -42,7 +42,6 @@ const SearchFilter = ({
       router.push(`?${params.toString()}`);
     });
   }, [debounceValue, paramName, searchParams, router]);
-  console.log({ debounceValue });
 
   return (
     <div className="relative">

@@ -7,7 +7,7 @@ const DashboardSidebar = async () => {
   const userInfo = await getUserInfo();
 
   const navItems: NavSection[] = getNavItemsByRole();
-  const dashboardHome = "/admin/dashboard";
+  const dashboardHome = "/";
   return (
     <DashboardSidebarContent
       userInfo={userInfo}

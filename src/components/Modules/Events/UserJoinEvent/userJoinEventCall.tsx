@@ -78,7 +78,6 @@ export const userJoinEventColumns: Column<IBooking>[] = [
     header: "Status",
     accessor: (booking) => {
       const config = statusConfig[booking.bookingStatus];
-      console.log(BookingStatus.BOOKED);
 
       return (
         <Badge variant={config?.variant} className={config?.className}>

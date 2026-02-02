@@ -1,9 +1,22 @@
+"use server";
+
 import { serverFetch } from "@/lib/server-fetch";
+import { revalidateTag } from "next/cache";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const getAllUsers = async (queryString?: string) => {
   try {
-    const res = await serverFetch.get("/user?role=USER");
+    const searchParams = new URLSearchParams(queryString);
+
+    const page = searchParams.get("page") || "1";
+    const res = await serverFetch.get(
+      `/user?role=USER&${queryString ? `?${queryString}` : ""}`,
+      {
+        next: {
+          tags: ["user-list", `user-page-${page}`],
+        },
+      },
+    );
     return res.json();
   } catch (error: any) {
     if (error?.digest?.startsWith("NEXT_REDIRECT")) {
@@ -33,8 +46,11 @@ export const updateUserStatue = async (
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),
     });
-
-    return res.json();
+    const result = await res.json();
+    if (result.success) {
+      revalidateTag("user-list", { expire: 0 });
+    }
+    return result;
   } catch (error: any) {
     if (error?.digest?.startsWith("NEXT_REDIRECT")) {
       throw error;

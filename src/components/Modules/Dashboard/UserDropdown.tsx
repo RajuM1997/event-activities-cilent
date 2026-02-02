@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -12,9 +11,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { Settings, User } from "lucide-react";
+import { IUser } from "@/types/user.interface";
 
 interface UserDropdownProps {
-  userInfo: any;
+  userInfo: IUser;
 }
 const UserDropdown = ({ userInfo }: UserDropdownProps) => {
   return (
@@ -32,7 +32,7 @@ const UserDropdown = ({ userInfo }: UserDropdownProps) => {
             <p className="text-sm font-medium">{userInfo.name}</p>
             <p className="text-sm text-muted-foreground">{userInfo.email}</p>
             <p className="text-sm text-primary capitalize">
-              {userInfo.role.toLocaleLowerCase()}
+              {userInfo.role?.toLocaleLowerCase()}
             </p>
           </div>
         </DropdownMenuLabel>

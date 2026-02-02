@@ -1,5 +1,7 @@
+"use server";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { serverFetch } from "@/lib/server-fetch";
+import { revalidateTag } from "next/cache";
 
 export async function initiatePayment(eventId: string) {
   try {
@@ -10,6 +12,9 @@ export async function initiatePayment(eventId: string) {
     });
 
     const result = await response.json();
+    if (result.success) {
+      revalidateTag("ser-event-list", { expire: 0 });
+    }
     return result;
   } catch (error: any) {
     console.error("Error initiating payment:", error);
@@ -35,6 +40,9 @@ export const cancelEventBooking = async (bookingId: string) => {
     );
 
     const result = await response.json();
+    if (result.success) {
+      revalidateTag("ser-event-list", { expire: 0 });
+    }
     return result;
   } catch (error: any) {
     console.error("Error initiating payment:", error);

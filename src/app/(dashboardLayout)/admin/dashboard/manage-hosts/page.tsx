@@ -21,6 +21,7 @@ const ManageHostPage = async ({
 }) => {
   const searchParamsObj = await searchParams;
   const queryString = queryStringFormatter(searchParamsObj);
+
   const { data, meta } = await getHosts(queryString);
 
   return (
