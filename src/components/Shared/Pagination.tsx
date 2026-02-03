@@ -44,7 +44,7 @@ const Pagination = ({ currentPage, totalPages }: PaginationProps) => {
   const currentLimit = searchParams.get("limit") || "10";
 
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div className="flex items-center flex-wrap justify-center gap-2">
       <Button
         variant="outline"
         size="sm"

@@ -25,7 +25,6 @@ const EventPage = async ({
   const searchParamsObj = await searchParams;
   const queryString = queryStringFormatter(searchParamsObj);
   const { data, meta } = await getEvents(queryString);
-  console.log(meta);
 
   return (
     <section className="py-16 ">
@@ -57,15 +56,16 @@ const EventPage = async ({
               No events found. Check back soon for upcoming events!
             </p>
           )}
+          <section className=" pt-7 mx-auto col-span-3 hidden lg:flex"></section>
+          {meta?.totalPages > 1 && (
+            <section className=" pt-7 mx-auto col-span-12 lg:col-span-9 ">
+              <Pagination
+                totalPages={meta?.totalPages || 1}
+                currentPage={meta?.page || 1}
+              />
+            </section>
+          )}
         </div>
-        {meta?.totalPages > 1 && (
-          <section className="pt-5">
-            <Pagination
-              totalPages={meta?.totalPages || 1}
-              currentPage={meta?.page || 1}
-            />
-          </section>
-        )}
       </div>
     </section>
   );

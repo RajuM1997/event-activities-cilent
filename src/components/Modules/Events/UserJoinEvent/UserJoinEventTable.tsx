@@ -36,7 +36,10 @@ export default function UserEventsTable({
     if (!bookingEvent) return;
 
     setIsCanceled(true);
-    const result = await cancelEventBooking(bookingEvent.id);
+    const result = await cancelEventBooking(
+      bookingEvent.id,
+      bookingEvent.eventId,
+    );
     setIsCanceled(false);
 
     if (result?.success) {

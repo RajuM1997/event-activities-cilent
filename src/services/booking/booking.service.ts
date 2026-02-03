@@ -28,10 +28,13 @@ export async function initiatePayment(eventId: string) {
   }
 }
 
-export const cancelEventBooking = async (bookingId: string) => {
+export const cancelEventBooking = async (
+  bookingId: string,
+  eventId: string,
+) => {
   try {
     const response = await serverFetch.patch(
-      `/event/cancel-event/${bookingId}`,
+      `/event/cancel-event/${eventId}?bookingId=${bookingId}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -41,17 +44,17 @@ export const cancelEventBooking = async (bookingId: string) => {
 
     const result = await response.json();
     if (result.success) {
-      revalidateTag("ser-event-list", { expire: 0 });
+      revalidateTag("user-event-list", { expire: 0 });
     }
     return result;
   } catch (error: any) {
-    console.error("Error initiating payment:", error);
+    console.error("Error cancel join event:", error);
     return {
       success: false,
       message:
         process.env.NODE_ENV === "development"
           ? error.message
-          : "Failed to initiate payment",
+          : "Failed to cancel join event",
     };
   }
 };

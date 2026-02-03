@@ -70,8 +70,6 @@ export default function ReviewDialog({
         toast.success("Review submitted successfully!");
         onClose();
         router.refresh();
-      } else {
-        toast.error(result.message || "Failed to submit review");
       }
     } catch (error) {
       toast.error("An error occurred while submitting review");
